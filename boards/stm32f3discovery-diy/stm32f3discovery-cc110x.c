@@ -151,6 +151,22 @@ int cc110x_get_gdo2(void)
 
 void cc110x_spi_init(void)
 {
+
+
+
+	//
+
+
+
+
+
+
+
+
+
+
+
+
     // configure chip-select (hier: NSS)
 	// NSS (Active Low), connected to PA4 (check if up-to-date!)
 	C1101_LE_PORT->AFRL   |= (0x5  << 4*C1101_LE_PIN); // AFRL:   0x05 (SPI1_NSS)

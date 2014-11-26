@@ -126,6 +126,10 @@ int gpio_init_out(gpio_t dev, gpio_pp_t pushpull)
             pin = GPIO_11_PIN;
             break;
 #endif
+// TODO DIY: Hier noch GPIO_A1, GPIO_A2, etc... einfuegen!
+// siehe /diy14bus/RIOT/boards/stm32f3discovery-diy/periph_conf.h
+
+
     }
 
     port->MODER &= ~(2 << (2 * pin));           /* set pin to output mode */

@@ -228,6 +228,11 @@ extern "C" {
 #define GPIO_11_EXTI_CFG1() (SYSCFG->EXTICR[0] &= ~(SYSCFG_EXTICR1_EXTI0))
 #define GPIO_11_EXTI_CFG2() (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI0_PA)
 #define GPIO_11_IRQ          EXTI0_IRQn
+
+// TODO DIY: Hier PA1, PA2, etc... einfuegen!
+// siehe /diy14bus/RIOT/cpu/stm32f3/periph/gpio.c
+
+
 /** @} */
 
 #ifdef __cplusplus
