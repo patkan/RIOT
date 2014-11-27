@@ -127,6 +127,7 @@ int spi_conf_pins(spi_t dev)
             break;
 #endif
         default:
+			
             return -1;
     }
 
