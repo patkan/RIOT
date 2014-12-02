@@ -73,6 +73,8 @@ extern "C" {
 #define LED_RED_TOGGLE      LD3_TOGGLE
 /** @} */
 
+typedef uint8_t radio_packet_length_t;
+
 /**
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO
  */
