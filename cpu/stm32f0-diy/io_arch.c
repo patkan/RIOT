@@ -19,7 +19,6 @@
  */
 
 #include "board.h"
-#include "arch/io_arch.h"
 #include "periph/uart.h"
 
 
