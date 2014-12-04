@@ -74,6 +74,8 @@ extern "C" {
 /** @} */
 
 typedef uint8_t radio_packet_length_t;
+#define RX_BUF_SIZE  (10)
+#define TRANSCEIVER_BUFFER_SIZE (10)
 
 /**
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO
