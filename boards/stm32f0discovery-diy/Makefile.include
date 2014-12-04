@@ -1,5 +1,5 @@
 # define the cpu used by the stm32f0-discovery board
-export CPU = stm32f0
+export CPU = stm32f0-diy
 export CPU_MODEL = stm32f051r8
 
 #define the default port depending on the host OS
