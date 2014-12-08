@@ -1,5 +1,5 @@
 # define the cpu used by the stm32f3-discovery board
-export CPU = stm32f3
+export CPU = stm32f3-diy
 export CPU_MODEL = stm32f303vc
 
 #define the default port depending on the host OS
