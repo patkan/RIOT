@@ -28,7 +28,7 @@ void board_init(void)
     /* initialize the boards LEDs */
     leds_init();
 
-    radio_init();
+    //radio_init();
 
     /* initialize the CPU */
     cpu_init();
