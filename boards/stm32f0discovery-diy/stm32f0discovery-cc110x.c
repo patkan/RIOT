@@ -26,10 +26,9 @@
 //#define SPI_PIN_CLK	5
 
 /* Latch enable of C1101 Transceiver */
-#define C1101_LE_PORT	GPIOA	
-#define C1101_LE_PIN	4	
-
-
+//#define C1101_LE_PORT	GPIOA	
+//#define C1101_LE_PIN	4	
+//using GPIO_2 as LE
 
 #define CC1100_GDO0         (gpio_read(GPIO_3) != 0)   // read serial I/O (GDO0)   
 #define CC1100_GDO1         (gpio_read(GPIO_4) != 0)   // read serial I/O (GDO1)   
@@ -95,9 +94,6 @@ void cc110x_spi_init(void)
 	gpio_init_in(GPIO_4, GPIO_NOPULL);	//CC1100_GDO1 = MISO!
 	gpio_init_int(GPIO_5, GPIO_NOPULL, GPIO_RISING, (void *)cc110x_gdo2_irq, 0);	//CC1100_GDO2
 
-
-
-
     int dummy;
 
     // Clear RxFIFO:
@@ -119,6 +115,8 @@ uint8_t cc110x_txrx(uint8_t c)
 #endif
 
     while (!SPI_TX_EMPTY) {
+	// TODO DIY: bleibt hier stecken
+//LD4_ON;
 #ifdef DEBUG
         test_time(0);
 #endif
