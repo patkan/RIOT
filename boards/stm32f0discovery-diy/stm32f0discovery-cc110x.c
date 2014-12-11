@@ -245,7 +245,8 @@ void cc110x_init_interrupts(void)
 {
     // Enable external interrupt on low edge (for GDO2)
     //FIO0DIR &= ~BIT28;
-    //cc110x_gdo2_enable();
+    cc110x_gdo2_enable();
+    cc110x_gdo0_enable();
     // Enable external interrupt on low edge (for GDO0)
     //FIO0DIR &= ~BIT27;
 }
