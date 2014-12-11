@@ -1,17 +1,13 @@
-/*
+/**
+ * Hash string implementation
+ *
  * Copyright (C) 2013 Kaspar Schleiser <kaspar@schleiser.de>
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
  * directory for more details.
- */
-
-/**
- * @defgroup sys_hash_string
- * @ingroup sys
  *
- * @brief Hash string implementation
- *
+ * @ingroup sys_lib
  * @{
  * @file
  * @author Kaspar Schleiser <kaspar@schleiser.de>
