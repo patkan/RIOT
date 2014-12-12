@@ -129,7 +129,7 @@ extern "C" {
 #define SPI_0_PIN_SCK       5
 #define SPI_0_PIN_MISO      6
 #define SPI_0_PIN_MOSI      7
-#define SPI_0_PIN_AF        0
+#define SPI_0_PIN_AF        5
 
 /* SPI 1 device config */
 #define SPI_1_DEV           SPI2
@@ -143,7 +143,7 @@ extern "C" {
 #define SPI_1_PIN_SCK       13
 #define SPI_1_PIN_MISO      14
 #define SPI_1_PIN_MOSI      15
-#define SPI_1_PIN_AF        0
+#define SPI_1_PIN_AF        5
 /** @} */
 
 
