@@ -35,7 +35,6 @@
 #include "sixlowpan.h"
 #include "net_help.h"
 
-/* You can only run Storing Mode by now. Other unsupported modes lead to default (Storing Mode) */
 #if RPL_DEFAULT_MOP == RPL_STORING_MODE_NO_MC
 #include "rpl/rpl_storing.h"
 #elif RPL_DEFAULT_MOP == RPL_NON_STORING_MODE
@@ -65,10 +64,9 @@ uint8_t srh_send_buffer[BUFFER_SIZE];
 ipv6_addr_t *down_next_hop;
 ipv6_srh_t *srh_header;
 msg_t srh_m_send, srh_m_recv;
-rpl_routing_entry_t rpl_routing_table[RPL_MAX_ROUTING_ENTRIES_NON_STORING];
-#else
-rpl_routing_entry_t rpl_routing_table[RPL_MAX_ROUTING_ENTRIES_STORING];
 #endif
+
+rpl_routing_entry_t rpl_routing_table[RPL_MAX_ROUTING_ENTRIES];
 
 uint8_t rpl_max_routing_entries;
 ipv6_addr_t my_address;
@@ -82,16 +80,8 @@ uint8_t rpl_init(int if_id)
     rpl_instances_init();
 
     /* initialize routing table */
+    rpl_max_routing_entries = RPL_MAX_ROUTING_ENTRIES;
     rpl_clear_routing_table();
-
-    if (RPL_DEFAULT_MOP == RPL_STORING_MODE_NO_MC) {
-        rpl_max_routing_entries = RPL_MAX_ROUTING_ENTRIES_STORING;
-        rpl_clear_routing_table();
-    }
-    else {
-        rpl_max_routing_entries = RPL_MAX_ROUTING_ENTRIES_NON_STORING;
-        rpl_clear_routing_table();
-    }
 
     if (rpl_routing_table == NULL) {
         DEBUGF("Routing table init failed!\n");
@@ -124,6 +114,17 @@ uint8_t rpl_init(int if_id)
 
 void rpl_init_root(void)
 {
+#if (RPL_DEFAULT_MOP == RPL_NON_STORING_MODE)
+#ifndef RPL_NODE_IS_ROOT
+puts("\n############################## ERROR ###############################");
+puts("This configuration has NO ROUTING TABLE available for the root node!");
+puts("The root will NOT be INITIALIZED.");
+puts("Please build the binary for root in non-storing MOP with:");
+puts("\t\t'make RPL_NODE_IS_ROOT=1'");
+puts("############################## ERROR ###############################\n");
+return;
+#endif
+#endif
     rpl_init_root_mode();
 }
 
@@ -424,7 +425,7 @@ void rpl_add_srh_entry(ipv6_addr_t *child, ipv6_addr_t *parent, uint16_t lifetim
     /* This maybe a bit confusing since the root also using the standard routing table, but in this case
      * the code stays cleaner - especially for rt_over_timer from trickle.c. Just keep in mind that
      * address is now child (unique, iteration variable) and parent is now next_hop. The whole routing table
-     * transforms to a list of childs and their parents, so that route aggregation can be done properly.
+     * transforms to a list of children and their parents, so that route aggregation can be done properly.
      */
     DEBUGF("Adding source-routing entry child: %s\n", ipv6_addr_to_str(addr_str, IPV6_MAX_ADDR_STR_LEN, child));
     DEBUGF("Adding source-routing entry parent: %s\n", ipv6_addr_to_str(addr_str, IPV6_MAX_ADDR_STR_LEN, parent));
