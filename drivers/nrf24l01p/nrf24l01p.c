@@ -125,8 +125,8 @@ int nrf24l01p_init(nrf24l01p_t *dev, spi_t spi, gpio_t ce, gpio_t cs, gpio_t irq
         return status;
     }
 
-    /* Set RF power */
-    status = nrf24l01p_set_power(dev, 0);
+    /* Set RF power */ // TODO: funktioniert nicht?
+    //status = nrf24l01p_set_power(dev, 0);
 
     if (status < 0) {
         return status;
@@ -161,7 +161,7 @@ int nrf24l01p_init(nrf24l01p_t *dev, spi_t spi, gpio_t ce, gpio_t cs, gpio_t irq
     }
 
     /* Setup Auto ACK and retransmission */
-    status = nrf24l01p_setup_auto_ack(dev, NRF24L01P_PIPE0, NRF24L01P_RETR_750US, 15);
+    //status = nrf24l01p_setup_auto_ack(dev, NRF24L01P_PIPE0, NRF24L01P_RETR_750US, 15);
 
     if (status < 0) {
         return status;

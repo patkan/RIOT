@@ -151,7 +151,7 @@ extern "C" {
  * @brief GPIO configuration
  * @{
  */
-#define GPIO_NUMOF          12
+#define GPIO_NUMOF          13
 #define GPIO_0_EN           1
 #define GPIO_1_EN           1
 #define GPIO_2_EN           1
@@ -164,11 +164,13 @@ extern "C" {
 #define GPIO_9_EN           1
 #define GPIO_10_EN          1
 #define GPIO_11_EN          1
+#define GPIO_12_EN          1
 #define GPIO_IRQ_PRIO       1
 
 /* IRQ config */
-#define GPIO_IRQ_0          GPIO_11 /* alternatively GPIO_4 could be used here */
-#define GPIO_IRQ_1          GPIO_5
+#define GPIO_IRQ_0          GPIO_11
+#define GPIO_IRQ_1          GPIO_12
+//#define GPIO_IRQ_1          GPIO_5
 #define GPIO_IRQ_2          GPIO_0
 #define GPIO_IRQ_3          GPIO_3
 #define GPIO_IRQ_4          GPIO_1
@@ -269,6 +271,13 @@ extern "C" {
 #define GPIO_11_EXTI_CFG1() (SYSCFG->EXTICR[0] &= ~(SYSCFG_EXTICR1_EXTI0))
 #define GPIO_11_EXTI_CFG2() (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI0_PA)
 #define GPIO_11_IRQ          EXTI0_IRQn
+/* GPIO channel 12 config */
+#define GPIO_12_PORT        GPIOA
+#define GPIO_12_PIN         1
+#define GPIO_12_CLKEN()     (RCC->AHBENR |= RCC_AHBENR_GPIOAEN)
+#define GPIO_12_EXTI_CFG1() (SYSCFG->EXTICR[0] &= ~(SYSCFG_EXTICR1_EXTI1))
+#define GPIO_12_EXTI_CFG2() (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI1_PA)
+#define GPIO_12_IRQ          EXTI1_IRQn
 
 // TODO DIY: Hier PA1, PA2, etc... einfuegen!
 // siehe /diy14bus/RIOT/cpu/stm32f3/periph/gpio.c

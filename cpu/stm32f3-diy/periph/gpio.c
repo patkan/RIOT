@@ -126,6 +126,13 @@ int gpio_init_out(gpio_t dev, gpio_pp_t pushpull)
             pin = GPIO_11_PIN;
             break;
 #endif
+#if GPIO_12_EN
+        case GPIO_12:
+            GPIO_12_CLKEN();
+            port = GPIO_12_PORT;
+            pin = GPIO_12_PIN;
+            break;
+#endif
 // TODO DIY: Hier noch GPIO_A1, GPIO_A2, etc... einfuegen! ....
 // siehe /diy14bus/RIOT/boards/stm32f3discovery-diy/include/periph_conf.h
 
@@ -231,6 +238,13 @@ int gpio_init_in(gpio_t dev, gpio_pp_t pushpull)
             GPIO_11_CLKEN();
             port = GPIO_11_PORT;
             pin = GPIO_11_PIN;
+            break;
+#endif
+#if GPIO_12_EN
+        case GPIO_12:
+            GPIO_12_CLKEN();
+            port = GPIO_12_PORT;
+            pin = GPIO_12_PIN;
             break;
 #endif
     }
@@ -363,6 +377,15 @@ int gpio_init_int(gpio_t dev, gpio_pp_t pullup, gpio_flank_t flank, gpio_cb_t cb
             NVIC_EnableIRQ(GPIO_11_IRQ);
             break;
 #endif
+#if GPIO_12_EN
+        case GPIO_12:
+            pin = GPIO_12_PIN;
+            GPIO_12_EXTI_CFG1();
+            GPIO_12_EXTI_CFG2();
+            NVIC_SetPriority(GPIO_12_IRQ, GPIO_IRQ_PRIO);
+            NVIC_EnableIRQ(GPIO_12_IRQ);
+            break;
+#endif
     }
 
     /* set callback */
@@ -454,6 +477,11 @@ void gpio_irq_enable(gpio_t dev)
             EXTI->IMR |= (1 << GPIO_11_PIN);
             break;
 #endif
+#if GPIO_12_EN
+        case GPIO_12:
+            EXTI->IMR |= (1 << GPIO_12_PIN);
+            break;
+#endif
     }
 }
 
@@ -518,6 +546,11 @@ void gpio_irq_disable(gpio_t dev)
 #if GPIO_11_EN
         case GPIO_11:
             EXTI->IMR &= ~(1 << GPIO_11_PIN);
+            break;
+#endif
+#if GPIO_12_EN
+        case GPIO_12:
+            EXTI->IMR &= ~(1 << GPIO_12_PIN);
             break;
 #endif
     }
@@ -601,6 +634,12 @@ int gpio_read(gpio_t dev)
             pin = GPIO_11_PIN;
             break;
 #endif
+#if GPIO_12_EN
+        case GPIO_12:
+            port = GPIO_12_PORT;
+            pin = GPIO_12_PIN;
+            break;
+#endif
     }
 
     if (port->MODER & (3 << (pin * 2))) {       /* if configured as output */
@@ -674,6 +713,11 @@ void gpio_set(gpio_t dev)
             GPIO_11_PORT->BSRRL = (1 << GPIO_11_PIN);
             break;
 #endif
+#if GPIO_12_EN
+        case GPIO_12:
+            GPIO_12_PORT->BSRRL = (1 << GPIO_12_PIN);
+            break;
+#endif
     }
 }
 
@@ -738,6 +782,11 @@ void gpio_clear(gpio_t dev)
 #if GPIO_11_EN
         case GPIO_11:
             GPIO_11_PORT->BSRRH = (1 << GPIO_11_PIN);
+            break;
+#endif
+#if GPIO_12_EN
+        case GPIO_12:
+            GPIO_12_PORT->BSRRH = (1 << GPIO_12_PIN);
             break;
 #endif
     }
