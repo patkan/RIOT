@@ -189,11 +189,12 @@ extern "C" {
 #define GPIO_9_EN           1
 #define GPIO_10_EN          1
 #define GPIO_11_EN          1
+#define GPIO_12_EN          1
 #define GPIO_IRQ_PRIO       1
 
 /* IRQ config */
 #define GPIO_IRQ_0          GPIO_0
-#define GPIO_IRQ_1          GPIO_1
+#define GPIO_IRQ_1          GPIO_12
 #define GPIO_IRQ_2          GPIO_0                  /* not configured */
 #define GPIO_IRQ_3          GPIO_0                  /* not configured */
 #define GPIO_IRQ_4          GPIO_2
@@ -281,6 +282,13 @@ extern "C" {
 #define GPIO_11_CLKEN()     (RCC->AHBENR |= RCC_AHBENR_GPIOCEN)
 #define GPIO_11_EXTI_CFG()  (SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI15_PC)
 #define GPIO_11_IRQ         EXTI4_15_IRQn
+/* GPIO channel 12 config */
+#define GPIO_12_PORT        GPIOA
+#define GPIO_12_PIN         1
+#define GPIO_12_CLKEN()     (RCC->AHBENR |= RCC_AHBENR_GPIOAEN)
+#define GPIO_12_EXTI_CFG1() (SYSCFG->EXTICR[0] &= ~(SYSCFG_EXTICR1_EXTI1))
+#define GPIO_12_EXTI_CFG2() (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI1_PA)
+#define GPIO_12_IRQ          EXTI1_IRQn
 /** @} */
 
 #ifdef __cplusplus

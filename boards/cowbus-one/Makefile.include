@@ -1,6 +1,6 @@
 # define the cpu used by the stm32f0-discovery board
-export CPU = stm32f0-diy
-export CPU_MODEL = stm32f051r8
+export CPU = cowbus-one
+export CPU_MODEL = stm32f051r8 //TODO-DIY
 
 #define the default port depending on the host OS
 OS := $(shell uname)
