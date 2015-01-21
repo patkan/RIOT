@@ -287,7 +287,7 @@ extern "C" {
 #define GPIO_12_PIN         2
 #define GPIO_12_CLKEN()     (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
 #define GPIO_12_EXTI_CFG()  (SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI15_PC) //TODO
-#define GPIO_12_IRQ          EXTI1_IRQn //TODO
+#define GPIO_12_IRQ         EXTI4_15_IRQn //TODO //doesn't make sense but compiles.
 /** @} */
 
 #ifdef __cplusplus
