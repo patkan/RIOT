@@ -73,7 +73,7 @@ static GPIO_TypeDef *const gpio_port_map[GPIO_NUMOF] = {
     [GPIO_11] = GPIO_11_PORT,
 #endif
 #if GPIO_12_EN
-    [GPIO_11] = GPIO_12_PORT,
+    [GPIO_12] = GPIO_12_PORT,
 #endif
 };
 
@@ -115,8 +115,8 @@ static const uint8_t gpio_pin_map[GPIO_NUMOF] = {
 #if GPIO_11_EN
     [GPIO_11] = GPIO_11_PIN,
 #endif
-#if GPIO_11_EN
-    [GPIO_11] = GPIO_12_PIN,
+#if GPIO_12_EN
+    [GPIO_12] = GPIO_12_PIN,
 #endif
 };
 
@@ -158,8 +158,8 @@ static const IRQn_Type gpio_irq_map[GPIO_NUMOF] = {
 #if GPIO_11_EN
     [GPIO_11] = GPIO_11_IRQ,
 #endif
-#if GPIO_11_EN
-    [GPIO_11] = GPIO_12_IRQ,
+#if GPIO_12_EN
+    [GPIO_12] = GPIO_12_IRQ,
 #endif
 };
 
@@ -293,8 +293,8 @@ int gpio_init_int(gpio_t dev, gpio_pp_t pullup, gpio_flank_t flank, gpio_cb_t cb
             break;
 #endif
 #ifdef GPIO_12_EN
-        case GPIO_11:
-            GPIO_11_EXTI_CFG();
+        case GPIO_12:
+            GPIO_12_EXTI_CFG();
             break;
 #endif
     }
