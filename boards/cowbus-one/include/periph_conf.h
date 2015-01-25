@@ -149,7 +149,7 @@ extern "C" {
 #define SPI_0_CLKDIS()      (RCC->APB2ENR &= ~(RCC_APB2ENR_SPI1EN))
 #define SPI_0_IRQ           SPI1_IRQn
 #define SPI_0_ISR           isr_spi1
-/* SPI 1 pin configuration */
+/* SPI 0 pin configuration */
 #define SPI_0_PORT          GPIOA
 #define SPI_0_PORT_CLKEN()  (RCC->AHBENR |= RCC_AHBENR_GPIOAEN)
 #define SPI_0_PIN_SCK       5
@@ -262,7 +262,7 @@ extern "C" {
 #define GPIO_8_PORT         GPIOC
 #define GPIO_8_PIN          12
 #define GPIO_8_CLKEN()      (RCC->AHBENR |= RCC_AHBENR_GPIOCEN)
-#define GPIO_8_EXTI_CFG()   (SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI12_PC) 
+#define GPIO_8_EXTI_CFG()   (SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI12_PC)
 #define GPIO_8_IRQ          EXTI4_15_IRQn
 /* GPIO channel 9 config */           //SW1
 #define GPIO_9_PORT         GPIOB
