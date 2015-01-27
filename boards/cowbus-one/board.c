@@ -45,8 +45,8 @@ void board_init(void)
  */
 void leds_init(void)
 {
-    /* enable clock for port GPIOC */
-    RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
+    /* enable clock for port GPIOA */
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
 
     /* set output speed to 50MHz */
     LED_PORT->OSPEEDR |= 0x000f0000;
