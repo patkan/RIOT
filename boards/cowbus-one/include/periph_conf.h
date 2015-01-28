@@ -278,7 +278,7 @@ extern "C" {
 #define GPIO_10_IRQ         EXTI4_15_IRQn //TODO
 /* GPIO channel 11 config */           //SW4
 #define GPIO_11_PORT        GPIOB
-#define GPIO_11_PIN         6
+#define GPIO_11_PIN         8
 #define GPIO_11_CLKEN()     (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
 #define GPIO_11_EXTI_CFG()  (SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI15_PC) //TODO
 #define GPIO_11_IRQ         EXTI4_15_IRQn //TODO
