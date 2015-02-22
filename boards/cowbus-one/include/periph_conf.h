@@ -195,14 +195,14 @@ extern "C" {
 /* IRQ config */
 #define GPIO_IRQ_0          GPIO_0
 #define GPIO_IRQ_1          GPIO_12
-#define GPIO_IRQ_2          GPIO_0                  /* not configured */
-#define GPIO_IRQ_3          GPIO_0                  /* not configured */
+#define GPIO_IRQ_2          GPIO_4                  /* not configured */
+#define GPIO_IRQ_3          GPIO_4                  /* not configured */
 #define GPIO_IRQ_4          GPIO_2
 #define GPIO_IRQ_5          GPIO_3
 #define GPIO_IRQ_6          GPIO_4
 #define GPIO_IRQ_7          GPIO_5
-#define GPIO_IRQ_8          GPIO_0                  /* not configured */
-#define GPIO_IRQ_9          GPIO_0                  /* not configured */
+#define GPIO_IRQ_8          GPIO_4                  /* not configured */
+#define GPIO_IRQ_9          GPIO_4                  /* not configured */
 #define GPIO_IRQ_10         GPIO_6
 #define GPIO_IRQ_11         GPIO_7
 #define GPIO_IRQ_12         GPIO_8
@@ -214,26 +214,26 @@ extern "C" {
 #define GPIO_0_PORT         GPIOA           //RGB-LED
 #define GPIO_0_PIN          0
 #define GPIO_0_CLKEN()      (RCC->AHBENR |= RCC_AHBENR_GPIOAEN)
-#define GPIO_0_EXTI_CFG()   (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI0_PA) //TODO
-#define GPIO_0_IRQ          EXTI0_1_IRQn //TODO
+#define GPIO_0_EXTI_CFG()   (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI0_PA) 
+#define GPIO_0_IRQ          EXTI0_1_IRQn
 /* GPIO channel 1 config */
 #define GPIO_1_PORT         GPIOA           //RGB-LED
 #define GPIO_1_PIN          1
 #define GPIO_1_CLKEN()      (RCC->AHBENR |= RCC_AHBENR_GPIOAEN)
-#define GPIO_1_EXTI_CFG()   (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI1_PA) //TODO
-#define GPIO_1_IRQ          EXTI0_1_IRQn //TODO
+#define GPIO_1_EXTI_CFG()   (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI1_PA)
+#define GPIO_1_IRQ          EXTI0_1_IRQn
 /* GPIO channel 2 config */
 #define GPIO_2_PORT         GPIOA           //RGB-LED
 #define GPIO_2_PIN          2
 #define GPIO_2_CLKEN()      (RCC->AHBENR |= RCC_AHBENR_GPIOAEN)
-#define GPIO_2_EXTI_CFG()   (SYSCFG->EXTICR[1] |= SYSCFG_EXTICR2_EXTI4_PA) //TODO
-#define GPIO_2_IRQ          EXTI4_15_IRQn //TODO
+#define GPIO_2_EXTI_CFG()   (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI2_PA)
+#define GPIO_2_IRQ          EXTI2_3_IRQn 
 /* GPIO channel 3 config */
 #define GPIO_3_PORT         GPIOA           //LED
 #define GPIO_3_PIN          3
 #define GPIO_3_CLKEN()      (RCC->AHBENR |= RCC_AHBENR_GPIOAEN)
-#define GPIO_3_EXTI_CFG()   (SYSCFG->EXTICR[1] |= SYSCFG_EXTICR2_EXTI5_PF) //TODO
-#define GPIO_3_IRQ          EXTI4_15_IRQn //TODO
+#define GPIO_3_EXTI_CFG()   (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI3_PA) 
+#define GPIO_3_IRQ          EXTI2_3_IRQn 
 /* GPIO channel 4 config */
 #define GPIO_4_PORT         GPIOF
 #define GPIO_4_PIN          6
@@ -250,14 +250,14 @@ extern "C" {
 #define GPIO_6_PORT         GPIOB
 #define GPIO_6_PIN          0
 #define GPIO_6_CLKEN()      (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
-#define GPIO_6_EXTI_CFG()   (SYSCFG->EXTICR[2] |= SYSCFG_EXTICR3_EXTI10_PC) //TODO
-#define GPIO_6_IRQ          EXTI4_15_IRQn //TODO
+#define GPIO_6_EXTI_CFG()   (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI0_PB)
+#define GPIO_6_IRQ          EXTI0_1_IRQn //TODO
 /* GPIO channel 7 config */           //nRF-CSN
 #define GPIO_7_PORT         GPIOB
 #define GPIO_7_PIN          1
 #define GPIO_7_CLKEN()      (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
-#define GPIO_7_EXTI_CFG()   (SYSCFG->EXTICR[2] |= SYSCFG_EXTICR3_EXTI11_PC) //TODO
-#define GPIO_7_IRQ          EXTI4_15_IRQn //TODO
+#define GPIO_7_EXTI_CFG()   (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI1_PB)
+#define GPIO_7_IRQ          EXTI0_1_IRQn //TODO
 /* GPIO channel 8 config */
 #define GPIO_8_PORT         GPIOC
 #define GPIO_8_PIN          12
@@ -268,26 +268,26 @@ extern "C" {
 #define GPIO_9_PORT         GPIOB
 #define GPIO_9_PIN          4
 #define GPIO_9_CLKEN()      (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
-#define GPIO_9_EXTI_CFG()   (SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI13_PC) //TODO
+#define GPIO_9_EXTI_CFG()   (SYSCFG->EXTICR[1] |= SYSCFG_EXTICR2_EXTI4_PB)
 #define GPIO_9_IRQ          EXTI4_15_IRQn //TODO
 /* GPIO channel 10 config */           //SW2
 #define GPIO_10_PORT        GPIOB
 #define GPIO_10_PIN         5
 #define GPIO_10_CLKEN()     (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
-#define GPIO_10_EXTI_CFG()  (SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI14_PC) //TODO
+#define GPIO_10_EXTI_CFG()  (SYSCFG->EXTICR[1] |= SYSCFG_EXTICR2_EXTI5_PB)
 #define GPIO_10_IRQ         EXTI4_15_IRQn //TODO
 /* GPIO channel 11 config */           //SW4
 #define GPIO_11_PORT        GPIOB
 #define GPIO_11_PIN         8
 #define GPIO_11_CLKEN()     (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
-#define GPIO_11_EXTI_CFG()  (SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI15_PC) //TODO
+#define GPIO_11_EXTI_CFG()  (SYSCFG->EXTICR[2] |= SYSCFG_EXTICR3_EXTI8_PB)
 #define GPIO_11_IRQ         EXTI4_15_IRQn //TODO
 /* GPIO channel 12 config */           //nRF-IRQ
 #define GPIO_12_PORT        GPIOB
 #define GPIO_12_PIN         2
 #define GPIO_12_CLKEN()     (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
-#define GPIO_12_EXTI_CFG()  (SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI15_PC) //TODO
-#define GPIO_12_IRQ         EXTI4_15_IRQn //TODO //doesn't make sense but compiles.
+#define GPIO_12_EXTI_CFG()  (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI2_PB)
+#define GPIO_12_IRQ         EXTI2_3_IRQn  //TODO 
 /** @} */
 
 #ifdef __cplusplus
