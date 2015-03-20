@@ -192,7 +192,7 @@ extern "C" {
 #define GPIO_12_EN          1
 #define GPIO_IRQ_PRIO       1
 
-/* IRQ config */ //was passiert hier????
+/* IRQ config */
 #define GPIO_IRQ_0          GPIO_0
 #define GPIO_IRQ_1          GPIO_0
 #define GPIO_IRQ_2          GPIO_12                  /* not configured */

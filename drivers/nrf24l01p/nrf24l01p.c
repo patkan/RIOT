@@ -908,7 +908,6 @@ int nrf24l01p_flush_rx_fifo(nrf24l01p_t *dev)
 void nrf24l01p_rx_cb(void *arg)
 {
     DEBUG("In HW cb\n");
-    //led1_off();
     nrf24l01p_t *dev = (nrf24l01p_t *)arg;
 
     /* clear interrupt */
