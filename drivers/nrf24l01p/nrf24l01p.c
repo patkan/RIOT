@@ -87,8 +87,7 @@ int nrf24l01p_init(nrf24l01p_t *dev, spi_t spi, gpio_t ce, gpio_t cs, gpio_t irq
     gpio_set(dev->cs);
 
     /* Init IRQ pin */
-    gpio_init_int(dev->irq, GPIO_PULLUP, GPIO_FALLING, nrf24l01p_rx_cb, dev);
-
+    gpio_init_int(dev->irq, GPIO_NOPULL, GPIO_FALLING, nrf24l01p_rx_cb, dev);
 
     /* Init SPI */
     spi_poweron(dev->spi);
@@ -909,7 +908,7 @@ int nrf24l01p_flush_rx_fifo(nrf24l01p_t *dev)
 void nrf24l01p_rx_cb(void *arg)
 {
     DEBUG("In HW cb\n");
-
+    //led1_off();
     nrf24l01p_t *dev = (nrf24l01p_t *)arg;
 
     /* clear interrupt */

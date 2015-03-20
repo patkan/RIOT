@@ -192,12 +192,12 @@ extern "C" {
 #define GPIO_12_EN          1
 #define GPIO_IRQ_PRIO       1
 
-/* IRQ config */
+/* IRQ config */ //was passiert hier????
 #define GPIO_IRQ_0          GPIO_0
-#define GPIO_IRQ_1          GPIO_12
-#define GPIO_IRQ_2          GPIO_4                  /* not configured */
+#define GPIO_IRQ_1          GPIO_0
+#define GPIO_IRQ_2          GPIO_12                  /* not configured */
 #define GPIO_IRQ_3          GPIO_4                  /* not configured */
-#define GPIO_IRQ_4          GPIO_2
+#define GPIO_IRQ_4          GPIO_9
 #define GPIO_IRQ_5          GPIO_3
 #define GPIO_IRQ_6          GPIO_4
 #define GPIO_IRQ_7          GPIO_5
@@ -226,7 +226,7 @@ extern "C" {
 #define GPIO_2_PORT         GPIOA           //RGB-LED
 #define GPIO_2_PIN          2
 #define GPIO_2_CLKEN()      (RCC->AHBENR |= RCC_AHBENR_GPIOAEN)
-#define GPIO_2_EXTI_CFG()   (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI2_PA)
+#define GPIO_2_EXTI_CFG()   (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI2_PB) //eigentlich A!!!
 #define GPIO_2_IRQ          EXTI2_3_IRQn 
 /* GPIO channel 3 config */
 #define GPIO_3_PORT         GPIOA           //LED
@@ -284,10 +284,10 @@ extern "C" {
 #define GPIO_11_IRQ         EXTI4_15_IRQn //TODO
 /* GPIO channel 12 config */           //nRF-IRQ
 #define GPIO_12_PORT        GPIOB
-#define GPIO_12_PIN         2
+#define GPIO_12_PIN         0 //war 2
 #define GPIO_12_CLKEN()     (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
-#define GPIO_12_EXTI_CFG()  (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI2_PB)
-#define GPIO_12_IRQ         EXTI2_3_IRQn  //TODO 
+#define GPIO_12_EXTI_CFG()  (SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI0_PB) //war 2
+#define GPIO_12_IRQ         EXTI0_1_IRQn  //TODO
 /** @} */
 
 #ifdef __cplusplus
