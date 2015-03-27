@@ -79,11 +79,11 @@ extern "C" {
 #define UART_0_IRQ          USART1_IRQn
 #define UART_0_ISR          isr_usart1
 /* UART 0 pin configuration */
-#define UART_0_PORT         GPIOB
-#define UART_0_PORT_CLKEN() (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
-#define UART_0_RX_PIN       7
-#define UART_0_TX_PIN       6
-#define UART_0_AF           0
+#define UART_0_PORT         GPIOA
+#define UART_0_PORT_CLKEN() (RCC->AHBENR |= RCC_AHBENR_GPIOAEN)
+#define UART_0_RX_PIN       10
+#define UART_0_TX_PIN       9
+#define UART_0_AF           1
 
 /* UART 1 device configuration */
 #define UART_1_DEV          USART2
