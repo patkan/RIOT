@@ -259,6 +259,7 @@ ifneq (,$(filter cbor,$(USEMODULE)))
 endif
 
 ifneq (,$(filter vtimer,$(USEMODULE)))
+  USEMODULE += xtimer
   USEMODULE += timex
 endif
 
