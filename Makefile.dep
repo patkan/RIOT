@@ -1,126 +1,253 @@
-ifneq (,$(filter libcoap,$(USEPKG)))
-	USEMODULE += pnet
+ifneq (,$(filter ng_netif_default,$(USEMODULE)))
+  USEMODULE += ng_netif
 endif
 
-ifneq (,$(filter pnet,$(USEMODULE)))
-	USEMODULE += posix
-	USEMODULE += socket_base
-	USEMODULE += net_help
+ifneq (,$(filter ng_netif,$(USEMODULE)))
+  USEMODULE += ng_netbase
 endif
 
-ifneq (,$(filter transport_layer,$(USEMODULE)))
-	USEMODULE += tcp
-	USEMODULE += udp
+ifneq (,$(filter ng_nomac,$(USEMODULE)))
+  USEMODULE += ng_netbase
 endif
 
-ifneq (,$(filter udp,$(USEMODULE)))
-	USEMODULE += socket_base
+ifneq (,$(filter at86rf2%,$(USEMODULE)))
+  USEMODULE += at86rf2xx
+  USEMODULE += ieee802154
 endif
 
-ifneq (,$(filter tcp,$(USEMODULE)))
-	USEMODULE += socket_base
+ifneq (,$(filter kw2xrf,$(USEMODULE)))
+  USEMODULE += ieee802154
 endif
 
-ifneq (,$(filter socket_base,$(USEMODULE)))
-	USEMODULE += sixlowpan
-	USEMODULE += net_help
-	USEMODULE += vtimer
+ifneq (,$(filter xbee,$(USEMODULE)))
+  USEMODULE += ieee802154
 endif
 
-ifneq (,$(filter sixlowborder,$(USEMODULE)))
-	USEMODULE += sixlowpan
+ifneq (,$(filter ng_zep,$(USEMODULE)))
+  USEMODULE += hashes
+  USEMODULE += ieee802154
+  USEMODULE += ng_udp
+  USEMODULE += random
+  USEMODULE += vtimer
 endif
 
-ifneq (,$(filter rpl,$(USEMODULE)))
-	USEMODULE += trickle
-	USEMODULE += routing
+ifneq (,$(filter ieee802154,$(USEMODULE)))
+  ifneq (,$(filter ng_ipv6, $(USEMODULE)))
+    USEMODULE += ng_sixlowpan
+  endif
+  ifneq (,$(filter ng_ipv6_router, $(USEMODULE)))
+    USEMODULE += ng_sixlowpan   # TODO: replace with ng_sixlowpan_router
+  endif
+  ifneq (,$(filter ng_ipv6_default, $(USEMODULE)))
+    USEMODULE += ng_sixlowpan_default
+  endif
+  ifneq (,$(filter ng_ipv6_router_default, $(USEMODULE)))
+    USEMODULE += ng_sixlowpan_default   # TODO: replace with ng_sixlowpan_router_default
+  endif
 endif
 
-ifneq (,$(filter routing,$(USEMODULE)))
-	USEMODULE += sixlowpan
+ifneq (,$(filter ng_sixlowpan_default,$(USEMODULE)))
+  USEMODULE += ng_ipv6_default
+  USEMODULE += ng_sixlowpan
+  USEMODULE += ng_sixlowpan_frag
+  USEMODULE += ng_sixlowpan_iphc
 endif
 
-ifneq (,$(filter sixlowpan,$(USEMODULE)))
-	USEMODULE += ieee802154
-	USEMODULE += net_help
-	USEMODULE += net_if
-	USEMODULE += posix
-	USEMODULE += vtimer
+ifneq (,$(filter ng_sixlowpan_frag,$(USEMODULE)))
+  USEMODULE += ng_sixlowpan
+  USEMODULE += vtimer
 endif
 
-ifneq (,$(filter aodvv2,$(USEMODULE)))
-        USEMODULE += vtimer
-        USEMODULE += sixlowpan
-        USEMODULE += oonf_common
-        USEMODULE += oonf_rfc5444
+ifneq (,$(filter ng_sixlowpan_iphc,$(USEMODULE)))
+  USEMODULE += ng_sixlowpan
+  USEMODULE += ng_sixlowpan_ctx
+endif
+
+ifneq (,$(filter ng_sixlowpan,$(USEMODULE)))
+  USEMODULE += ng_ipv6
+  USEMODULE += ng_sixlowpan_netif
+  USEMODULE += ng_netbase
+endif
+
+ifneq (,$(filter ng_sixlowpan_ctx,$(USEMODULE)))
+  USEMODULE += ipv6_addr
+  USEMODULE += vtimer
+endif
+
+ifneq (,$(filter ng_ipv6_default,$(USEMODULE)))
+  USEMODULE += ng_ipv6
+  USEMODULE += ng_icmpv6
+  USEMODULE += ng_ndp
+  USEMODULE += ng_ndp_internal
+  USEMODULE += ng_ndp_node
+endif
+
+ifneq (,$(filter ng_ipv6_router_default,$(USEMODULE)))
+  USEMODULE += ng_ipv6_router
+  USEMODULE += ng_icmpv6
+  USEMODULE += ng_ndp
+  USEMODULE += ng_ndp_internal
+  USEMODULE += ng_ndp_node
+endif
+
+ifneq (,$(filter ng_ndp,$(USEMODULE)))
+  USEMODULE += ng_icmpv6
+  USEMODULE += random
+  USEMODULE += timex
+  USEMODULE += vtimer
+endif
+
+ifneq (,$(filter ng_icmpv6_echo,$(USEMODULE)))
+  USEMODULE += ng_icmpv6
+  USEMODULE += ng_netbase
+endif
+
+ifneq (,$(filter ng_icmpv6,$(USEMODULE)))
+  USEMODULE += inet_csum
+  USEMODULE += ng_ipv6
+endif
+
+ifneq (,$(filter ng_ipv6_hdr,$(USEMODULE)))
+  USEMODULE += inet_csum
+  USEMODULE += ng_pktbuf
+endif
+
+ifneq (,$(filter ng_rpl_srh,$(USEMODULE)))
+  USEMODULE += ng_ipv6_ext_rh
+endif
+
+ifneq (,$(filter ng_ipv6_ext_rh,$(USEMODULE)))
+  USEMODULE += ng_ipv6_ext
+endif
+
+ifneq (,$(filter ng_ipv6_ext,$(USEMODULE)))
+  USEMODULE += ng_ipv6
+endif
+
+ifneq (,$(filter ng_ipv6_router,$(USEMODULE)))
+  USEMODULE += ng_ipv6
+endif
+
+ifneq (,$(filter ng_ipv6,$(USEMODULE)))
+  USEMODULE += inet_csum
+  USEMODULE += ipv6_addr
+  USEMODULE += ng_ipv6_hdr
+  USEMODULE += ng_ipv6_nc
+  USEMODULE += ng_ipv6_netif
+  USEMODULE += ng_netbase
+endif
+
+ifneq (,$(filter ng_ipv6_nc,$(USEMODULE)))
+  USEMODULE += ipv6_addr
+endif
+
+ifneq (,$(filter ng_ipv6_netif,$(USEMODULE)))
+  USEMODULE += ipv6_addr
+  USEMODULE += ng_netif
+endif
+
+ifneq (,$(filter ng_udp,$(USEMODULE)))
+  USEMODULE += ng_netbase
+  USEMODULE += inet_csum
+endif
+
+ifneq (,$(filter ng_nettest,$(USEMODULE)))
+  USEMODULE += ng_netapi
+  USEMODULE += ng_netreg
+  USEMODULE += ng_netif
+  USEMODULE += ng_pktbuf
+  USEMODULE += vtimer
+endif
+
+ifneq (,$(filter ng_netbase,$(USEMODULE)))
+  USEMODULE += ng_netapi
+  USEMODULE += ng_netreg
+  USEMODULE += ng_netif
+  USEMODULE += ng_netif_hdr
+  USEMODULE += ng_pktbuf
+endif
+
+ifneq (,$(filter ng_pktdump,$(USEMODULE)))
+  USEMODULE += ng_pktbuf
+  USEMODULE += od
+endif
+
+ifneq (,$(filter ng_pktbuf, $(USEMODULE)))
+  ifeq (,$(filter ng_pktbuf_%, $(USEMODULE)))
+    USEMODULE += ng_pktbuf_static
+  endif
+endif
+
+ifneq (,$(filter ng_pktbuf_%, $(USEMODULE)))
+  USEMODULE += ng_pktbuf # make MODULE_NG_PKTBUF macro available for all implementations
+endif
+
+ifneq (,$(filter ng_slip,$(USEMODULE)))
+  USEMODULE += ng_netbase
 endif
 
 ifneq (,$(filter uart0,$(USEMODULE)))
-	USEMODULE += posix
+  USEMODULE += posix
 endif
 
 ifneq (,$(filter posix,$(USEMODULE)))
-	USEMODULE += timex
-	USEMODULE += vtimer
+  USEMODULE += timex
+  USEMODULE += vtimer
 endif
 
 ifneq (,$(filter cbor,$(USEMODULE)))
-	USEMODULE += net_help
-endif
-
-ifneq (,$(filter cc110x%,$(USEMODULE)))
-	USEMODULE += protocol_multiplex
-	USEMODULE += vtimer
-endif
-
-ifneq (,$(filter cc110x,$(USEMODULE)))
-    USEMODULE += transceiver
-endif
-
-ifneq (,$(filter cc110x_legacy,$(USEMODULE)))
-	USEMODULE += transceiver
-endif
-
-ifneq (,$(filter cc2420,$(USEMODULE)))
-	USEMODULE += transceiver
-	USEMODULE += ieee802154
-endif
-
-ifneq (,$(filter at86rf231,$(USEMODULE)))
-	USEMODULE += netdev_802154
-	USEMODULE += ieee802154
-endif
-
-ifneq (,$(filter l2_ping,$(USEMODULE)))
-	USEMODULE += vtimer
+  USEMODULE += net_help
 endif
 
 ifneq (,$(filter vtimer,$(USEMODULE)))
-	USEMODULE += timex
-endif
-
-ifneq (,$(filter net_if,$(USEMODULE)))
-	USEMODULE += transceiver
-	USEMODULE += net_help
-	USEMODULE += hashes
-endif
-
-ifneq (,$(filter ccn_lite,$(USEMODULE)))
-	USEMODULE += crypto
-endif
-
-ifneq (,$(filter netdev_802154,$(USEMODULE)))
-	USEMODULE += netdev_base
+  USEMODULE += timex
 endif
 
 ifneq (,$(filter rgbled,$(USEMODULE)))
-	USEMODULE += color
+  USEMODULE += color
 endif
 
 ifneq (,$(filter libfixmath-unittests,$(USEMODULE)))
-	USEPKG += libfixmath
+  USEPKG += libfixmath
 endif
 
-ifneq (,$(filter defaulttransceiver,$(USEMODULE)))
-	FEATURES_REQUIRED += transceiver
+ifneq (,$(filter nhdp,$(USEMODULE)))
+  USEMODULE += vtimer
+  USEMODULE += oonf_common
+  USEMODULE += oonf_rfc5444
+endif
+
+ifneq (,$(filter fib,$(USEMODULE)))
+  USEMODULE += universal_address
+  USEMODULE += timex
+  USEMODULE += vtimer
+  USEMODULE += net_help
+endif
+
+ifneq (,$(filter oonf_common,$(USEMODULE)))
+  USEPKG += oonf_api
+  USEMODULE += socket_base
+endif
+
+# if any log_* is used, also use LOG pseudomodule
+ifneq (,$(filter log_%,$(USEMODULE)))
+  USEMODULE += log
+endif
+
+ifneq (,$(filter cpp11-compat,$(USEMODULE)))
+  USEMODULE += vtimer
+  USEMODULE += timex
+  FEATURES_REQUIRED += cpp
+endif
+
+ifneq (,$(filter newlib,$(USEMODULE)))
+  USEMODULE += uart_stdio
+endif
+
+ifneq (,$(filter ng_netdev_eth,$(USEMODULE)))
+  USEMODULE += ng_pktbuf
+endif
+
+ifneq (,$(filter hih6130,$(USEMODULE)))
+  USEMODULE += vtimer
 endif

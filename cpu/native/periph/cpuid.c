@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Martin Lenders <mlenders@inf.fu-berlin.de>
+ * Copyright (C) 2014 Martine Lenders <mlenders@inf.fu-berlin.de>
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -10,7 +10,7 @@
  * @addtogroup  driver_periph
  * @{
  *
- * @file        cpuid.c
+ * @file
  * @brief       Implementation
  *
  * @author      Martine Lenders <mlenders@inf.fu-berlin.de>
@@ -19,7 +19,7 @@
 #include <string.h>
 #include <stdint.h>
 
-#include "cpu-conf.h"
+#include "cpu_conf.h"
 #include "native_internal.h"
 
 #include "periph/cpuid.h"

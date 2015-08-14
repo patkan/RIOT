@@ -26,8 +26,6 @@
 
 The friendly Operating System for IoT!
 
-![Travis CI Status](https://travis-ci.org/RIOT-OS/RIOT.svg?branch=master)
-
 ## FEATURES
 RIOT OS is an operating system for Internet of Things (IoT) devices. It is based on a microkernel and designed for
 * energy efficiency
@@ -42,9 +40,9 @@ Its features comprise
 * the native port allows to run RIOT as-is on Linux, BSD, and MacOS. Multiple instances of RIOT running on a single machine can also be interconnected via a simple virtual Ethernet bridge
 * Wiselib support (C++ algorithm library, including routing, clustering, timesync, localization, security and more algorithms)
 * IPv6
-* TCP and UDP
+* UDP
 * 6LoWPAN
-* RPL
+* NHDP
 
 ## GETTING STARTED
 * You want to start the RIOT? Just follow our [Getting started documentation](https://github.com/RIOT-OS/RIOT/wiki/Introduction)
@@ -59,11 +57,6 @@ There is a shellscript in `RIOT/cpu/native` called `tapsetup.sh` which you can u
 *USAGE*
 To create a bridge and two (or count at your option) tap interfaces:
 ./tapsetup.sh create [count]
-
-### EXAMPLE APPLICATIONS
-In the `examples` directory you can find some example applications. The `default` application demonstrates all available features for the current platform.
-
-For example, you can use it to the test the native networking by running two instances: `make term PORT=tap0` and `make term PORT=tap1`. Now configure two different addresses for both RIOT instances by typing `addr 1` and `addr 2` respectively and send a text message from one "node" to another by typing `txtsnd 2 hello` on the first "node".
 
 ## CONTRIBUTE
 
@@ -81,7 +74,7 @@ To contribute something to RIOT, please refer to the [development procedures](ht
 
 ## LICENSE
 * All sources and binaries that have been developed at Freie Universität Berlin are
-  licensed under the GNU Lesser General Public License version 2 as published by the
+  licensed under the GNU Lesser General Public License version 2.1 as published by the
   Free Software Foundation.
 * Some external sources, especially files developed by SICS are published under
   a separate license.

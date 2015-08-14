@@ -10,14 +10,14 @@
  * @ingroup     posix
  * @{
  *
- * @file    strings.h
+ * @file
  * @brief   string operations
  *
  * @see     <a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/strings.h.html">
  *              The Open Group Base Specifications Issue 7, <strings.h>
  *          </a>
  *
- * @author  Martin Lenders <mlenders@inf.fu-berlin.de>
+ * @author  Martine Lenders <mlenders@inf.fu-berlin.de>
  */
 #ifndef STRINGS_H
 #define STRINGS_H

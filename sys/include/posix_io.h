@@ -9,13 +9,13 @@
 /**
  * @ingroup     posix
  * @{
- * @file        posix_io.h
+ * @file
  * @brief       POSIX-like IO
  *
  * @author      Kaspar Schleiser <kaspar@schleiser.de>
  * @author      Stephan Zeisberg <zeisberg@mi.fu-berlin.de>
  * @author      Oliver Hahm <oleg@hobbykeller.org>
- * @author      Martin Lenders <mlenders@inf.fu-berlin.de>
+ * @author      Martine Lenders <mlenders@inf.fu-berlin.de>
  */
 #ifndef __READ_H
 #define __READ_H

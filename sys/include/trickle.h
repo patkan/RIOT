@@ -15,15 +15,15 @@
  */
 
 /**
- * @file    trickle.h
+ * @file
  * @brief   Implementation of a generic Trickle Algorithm (RFC 6206)
  *
  * @author  Eric Engel <eric.engel@fu-berlin.de>
  * @author  Cenk Gündoğan <cnkgndgn@gmail.com>
  */
 
-#ifndef _TRICKLE_H
-#define _TRICKLE_H
+#ifndef TRICKLE_H
+#define TRICKLE_H
 
 #ifdef __cplusplus
  extern "C" {
@@ -110,5 +110,5 @@ void trickle_callback(trickle_t *trickle);
 }
 #endif
 
-#endif /* _TRICKLE_H */
+#endif /* TRICKLE_H */
 /** @} */

@@ -14,6 +14,8 @@
  * @}
  */
 
+#include "periph_conf.h"
+
 #ifndef HWTIMER_CPU_H_
 #define HWTIMER_CPU_H_
 
@@ -21,9 +23,10 @@
 extern "C" {
 #endif
 
-#define HWTIMER_MAXTIMERS 4
+#define HWTIMER_MAXTIMERS 1
 #define HWTIMER_SPEED 1000000
 #define HWTIMER_MAXTICKS (0xFFFFFFFF)
+#define HWTIMER_SPIN_BARRIER NATIVE_TIMER_MIN_RES
 
 #ifdef __cplusplus
 }

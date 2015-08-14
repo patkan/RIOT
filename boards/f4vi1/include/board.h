@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_f4vi1  F4VI1
+ * @defgroup    boards_f4vi1  F4VI1
  * @ingroup     boards
  * @brief       Board specific files for the F4VI1 board
  * @{
@@ -19,8 +19,8 @@
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "cpu.h"
 #include "periph_conf.h"
@@ -94,5 +94,5 @@ void board_init(void);
 }
 #endif
 
-#endif /** __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

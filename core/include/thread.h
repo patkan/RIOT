@@ -13,14 +13,14 @@
  *
  * @{
  *
- * @file        thread.h
+ * @file
  * @brief       Threading API
  *
  * @author      Kaspar Schleiser <kaspar@schleiser.de>
  */
 
-#ifndef __THREAD_H
-#define __THREAD_H
+#ifndef THREAD_H
+#define THREAD_H
 
 #include "kernel.h"
 #include "tcb.h"
@@ -35,12 +35,63 @@
  */
 #define STATUS_NOT_FOUND (-1)
 
+ /**
+ * @def THREAD_STACKSIZE_DEFAULT
+ * @brief A reasonable default stack size that will suffice most smaller tasks
+ */
+#ifndef THREAD_STACKSIZE_DEFAULT
+#error THREAD_STACKSIZE_DEFAULT must be defined per CPU
+#endif
+
+/**
+ * @def THREAD_STACKSIZE_IDLE
+ * @brief Size of the idle task's stack in bytes
+ */
+#ifndef THREAD_STACKSIZE_IDLE
+#error THREAD_STACKSIZE_IDLE must be defined per CPU
+#endif
+
+/**
+ * @def THREAD_EXTRA_STACKSIZE_PRINTF
+ * @ingroup conf
+ * @brief Size of the task's printf stack in bytes
+ */
+#ifndef THREAD_EXTRA_STACKSIZE_PRINTF
+#error THREAD_EXTRA_STACKSIZE_PRINTF must be defined per CPU
+#endif
+
+/**
+ * @def THREAD_STACKSIZE_MAIN
+ * @brief Size of the main task's stack in bytes
+ */
+#ifndef THREAD_STACKSIZE_MAIN
+#define THREAD_STACKSIZE_MAIN      (THREAD_STACKSIZE_DEFAULT + THREAD_EXTRA_STACKSIZE_PRINTF)
+#endif
+
 /**
  * @brief Minimum stack size
  */
-#ifndef MINIMUM_STACK_SIZE
-#define MINIMUM_STACK_SIZE  (sizeof(tcb_t))
+#ifndef THREAD_STACKSIZE_MINIMUM
+#define THREAD_STACKSIZE_MINIMUM  (sizeof(tcb_t))
 #endif
+
+/**
+ * @def THREAD_PRIORITY_MIN
+ * @brief Least priority a thread can have
+ */
+#define THREAD_PRIORITY_MIN            (SCHED_PRIO_LEVELS-1)
+
+/**
+ * @def THREAD_PRIORITY_IDLE
+ * @brief Priority of the idle thread
+ */
+#define THREAD_PRIORITY_IDLE           (THREAD_PRIORITY_MIN)
+
+/**
+ * @def THREAD_PRIORITY_MAIN
+ * @brief Priority of the main thread
+ */
+#define THREAD_PRIORITY_MAIN           (THREAD_PRIORITY_MIN - (SCHED_PRIO_LEVELS/2))
 
 /**
  * @brief Creates a new thread
@@ -56,7 +107,7 @@
  * A low value for *priority* number means the thread having a high priority
  * with 0 being the highest possible priority.
  *
- * The lowest possible priority is *PRIORITY_IDLE - 1*. The value is depending
+ * The lowest possible priority is *THREAD_PRIORITY_IDLE - 1*. The value is depending
  * on the platforms architecture, e.g. 30 in 32-bit systems, 14 in 16-bit systems.
  *
  *
@@ -68,6 +119,9 @@
  *  - CREATE_STACKTEST      write markers into the thread's stack to measure the stack's memory
  *                          usage (for debugging and profiling purposes)
  *
+ * @note Currently we support creating threads from within an ISR, however it is considered
+ *       to be a bad programming practice and we strongly discourage it.
+ *
  * @param[out] stack    start address of the preallocated stack memory
  * @param[in] stacksize the size of the thread's stack in bytes
  * @param[in] priority  priority of the new thread, lower mean higher priority
@@ -76,8 +130,10 @@
  * @param[in] arg       the argument to the function
  * @param[in] name      a human readable descriptor for the thread
  *
- * @return              value ``<0`` on error
- * @return              pid of newly created task, otherwise
+ * @return              PID of newly created task on success
+ * @return              -EINVAL, if @p priority is greater than or equal to
+ *                      @ref SCHED_PRIO_LEVELS
+ * @return              -EOVERFLOW, if there are too many threads running already
 */
 kernel_pid_t thread_create(char *stack,
                   int stacksize,
@@ -187,4 +243,4 @@ uintptr_t thread_measure_stack_free(char *stack);
 #endif
 
 /** @} */
-#endif /* __THREAD_H */
+#endif /* THREAD_H */

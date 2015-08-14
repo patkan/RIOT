@@ -53,16 +53,12 @@
 
 #define SHELL_BUFFER_SIZE        128
 
-static int shell_read(void);
-static void shell_write(int);
-static void cmd_send(int argc, char **argv);
-static void cmd_print_regs(int argc, char **argv);
-static void cmd_its(int argc, char **argv);
-
+static int cmd_send(int argc, char **argv);
+static int cmd_print_regs(int argc, char **argv);
+static int cmd_its(int argc, char **argv);
 
 void printbin(unsigned byte);
 void print_register(char reg, int num_bytes);
-
 
 static nrf24l01p_t nrf24l01p_0;
 
@@ -125,7 +121,7 @@ void print_register(char reg, int num_bytes)
     }
 }
 
-char rx_handler_stack[KERNEL_CONF_STACKSIZE_MAIN];
+char rx_handler_stack[THREAD_STACKSIZE_MAIN];
 
 /* RX handler that waits for a message from the ISR */
 void *nrf24l01p_rx_handler(void *arg)
@@ -182,7 +178,7 @@ void *nrf24l01p_rx_handler(void *arg)
 /**
  * @init transceiver
  */
-void cmd_its(int argc, char **argv)
+int cmd_its(int argc, char **argv)
 {
     (void) argc;
     (void) argv;
@@ -192,30 +188,30 @@ void cmd_its(int argc, char **argv)
     /* initialize transceiver device */
     if (nrf24l01p_init(&nrf24l01p_0, SPI_PORT, CE_PIN, CS_PIN, IRQ_PIN) < 0) {
         puts("Error in nrf24l01p_init");
-        return;
+        return 1;
     }
 
     /* create thread that gets msg when data arrives */
     if (thread_create(
-        rx_handler_stack, sizeof(rx_handler_stack), PRIORITY_MAIN - 1, 0,
+        rx_handler_stack, sizeof(rx_handler_stack), THREAD_PRIORITY_MAIN - 1, 0,
         nrf24l01p_rx_handler, 0, "nrf24l01p_rx_handler") < 0) {
         puts("Error in thread_create");
-        return;
+        return 1;
     }
 
     /* setup device as receiver */
     if (nrf24l01p_set_rxmode(&nrf24l01p_0) < 0) {
         puts("Error in nrf24l01p_set_rxmode");
-        return;
+        return 1;
     }
-    /* get and print all registers */
-    cmd_print_regs(0, 0);
+
+    return cmd_print_regs(0, 0);
 }
 
 /**
  * @set TX mode
  */
-void cmd_send(int argc, char **argv)
+int cmd_send(int argc, char **argv)
 {
     (void) argc;
     (void) argv;
@@ -232,17 +228,17 @@ void cmd_send(int argc, char **argv)
     /* power on the device */
     if (nrf24l01p_on(&nrf24l01p_0) < 0) {
         puts("Error in nrf24l01p_on");
-        return;
+        return 1;
     }
     /* setup device as transmitter */
     if (nrf24l01p_set_txmode(&nrf24l01p_0) < 0) {
         puts("Error in nrf24l01p_set_txmode");
-        return;
+        return 1;
     }
     /* load data to transmit into device */
     if (nrf24l01p_preload(&nrf24l01p_0, tx_buf, NRF24L01P_MAX_DATA_LENGTH) < 0) {
         puts("Error in nrf24l01p_preload");
-        return;
+        return 1;
     }
     /* trigger transmitting */
     nrf24l01p_transmit(&nrf24l01p_0);
@@ -259,14 +255,16 @@ void cmd_send(int argc, char **argv)
     /* setup device as receiver */
     if (nrf24l01p_set_rxmode(&nrf24l01p_0) < 0) {
         puts("Error in nrf24l01p_set_rxmode");
-        return;
+        return 1;
     }
+
+    return 0;
 }
 
 /**
  * @print registers
  */
-void cmd_print_regs(int argc, char **argv)
+int cmd_print_regs(int argc, char **argv)
 {
     (void) argc;
     (void) argv;
@@ -321,23 +319,8 @@ void cmd_print_regs(int argc, char **argv)
 
     puts("REG_FEATURE: ");
     print_register(REG_FEATURE, 1);
-}
 
-
-/**
- * @brief proxy for reading a char from std-in and passing it to the shell
- */
-int shell_read(void)
-{
-    return (int) getchar();
-}
-
-/**
- * @brief proxy for taking a character from the shell and writing it to std-out
- */
-void shell_write(int c)
-{
-    putchar((char)c);
+    return 0;
 }
 
 int main(void)
@@ -347,8 +330,7 @@ int main(void)
     puts("Welcome to RIOT!");
 
     puts("Initializing shell...");
-    shell_init(&shell, shell_commands, SHELL_BUFFER_SIZE, shell_read,
-               shell_write);
+    shell_init(&shell, shell_commands, SHELL_BUFFER_SIZE, getchar, putchar);
 
     puts("Starting shell...");
     shell_run(&shell);

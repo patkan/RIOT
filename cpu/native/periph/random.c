@@ -21,7 +21,7 @@
 #include <fcntl.h>
 
 
-#include "cpu-conf.h"
+#include "cpu_conf.h"
 #include "native_internal.h"
 
 #include "periph/random.h"
@@ -92,7 +92,6 @@ int random_read(char *buf, unsigned int num)
             num = _native_rng_read_det(buf, num);
             break;
         default:
-            num = 0;
             err(EXIT_FAILURE, "random_read: _native_rng_mode is in invalid state %i\n",
                    _native_rng_mode);
             break;

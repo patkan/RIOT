@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_openmote OpenMote
+ * @defgroup    boards_openmote OpenMote
  * @ingroup     boards
  * @brief       Support for the OpenMote board
  * @{
@@ -18,8 +18,8 @@
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "cpu.h"
 #include "periph/gpio.h"
@@ -88,5 +88,5 @@ void board_init(void);
 } /* end extern "C" */
 #endif
 
-#endif /** __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

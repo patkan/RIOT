@@ -157,7 +157,7 @@ double decode_float_half(unsigned char *halfp)
         val = mant == 0 ? INFINITY : NAN;
     }
 
-    return half & 0x8000 ? -val : val;
+    return (half & 0x8000) ? -val : val;
 }
 
 /**
@@ -574,6 +574,11 @@ size_t cbor_deserialize_byte_string(const cbor_stream_t *stream, size_t offset, 
 size_t cbor_serialize_byte_string(cbor_stream_t *stream, const char *val)
 {
     return encode_bytes(CBOR_BYTES, stream, val, strlen(val));
+}
+
+size_t cbor_serialize_byte_stringl(cbor_stream_t *stream, const char *val, size_t length)
+{
+    return encode_bytes(CBOR_BYTES, stream, val, length);
 }
 
 size_t cbor_deserialize_unicode_string(const cbor_stream_t *stream, size_t offset, char *val,

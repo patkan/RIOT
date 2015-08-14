@@ -15,7 +15,7 @@
  *
  * @{
  *
- * @file        srf08.h
+ * @file
  * @brief       Driver definitions for the SRF02 ultrasonic ranger.
  *
  * The connection between the SRF08 and the MCU is based on the i2c interface.
@@ -119,7 +119,7 @@ int srf08_set_max_range(srf08_t *dev, uint8_t max_range);
  * @brief       Set the maximum of the analog stages.
  *
  * @ note
- * This value is just a limitation of the maximum amplification and not the actual. 
+ * This value is just a limitation of the maximum amplification and not the actual.
  * While measuing, this value starts at its minimum and increases approx. each 75 us
  * until the maximum value is reached.
  *

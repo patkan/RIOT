@@ -18,8 +18,8 @@
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef __PWM_H
-#define __PWM_H
+#ifndef PWM_H
+#define PWM_H
 
 #include "periph_conf.h"
 
@@ -76,7 +76,7 @@ typedef enum {
  * @param[in] frequency     the PWM frequency in Hz
  * @param[in] resolution    the PWM resolution
  *
- * @return                  0 on success
+ * @return                  Actual PWM frequency on success
  * @return                  -1 on mode not applicable
  * @return                  -2 on frequency and resolution not applicable
  */
@@ -137,5 +137,5 @@ void pwm_poweroff(pwm_t dev);
 }
 #endif
 
-#endif /* __PWM_H */
+#endif /* PWM_H */
 /** @} */

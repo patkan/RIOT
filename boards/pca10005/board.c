@@ -7,10 +7,10 @@
  */
 
 /**
- * @ingroup     board_pca10005
+ * @ingroup     boards_pca10005
  * @{
  *
- * @file        board.c
+ * @file
  * @brief       Board specific implementations for the nRF51822 evaluation board pca10005
  *
  * @author      Christian Kühling <kuehling@zedat.fu-berlin.de>

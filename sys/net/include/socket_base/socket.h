@@ -15,7 +15,7 @@
  *          IEEE Std 1003.1, 2013 Edition - sys/socket.h
  *      </a>
  * @author  Oliver Gesch <oliver.gesch@googlemail.com>
- * @author  Martin Lenders <mlenders@inf.fu-berlin.de>
+ * @author  Martine Lenders <mlenders@inf.fu-berlin.de>
  */
 
 
@@ -24,7 +24,7 @@
 
 #include <stdint.h>
 
-#include "ipv6.h"
+#include "net/ng_ipv6.h"
 
 #include "socket_base/in.h"
 

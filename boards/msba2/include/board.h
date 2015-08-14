@@ -18,8 +18,8 @@
  * @author      unknown
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "msba2_common.h"
 #include "bitarithm.h"
@@ -41,11 +41,9 @@ extern "C" {
 
 void init_clks1(void);
 
-typedef uint8_t radio_packet_length_t;
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

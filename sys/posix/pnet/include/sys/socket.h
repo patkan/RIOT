@@ -12,13 +12,13 @@
  */
 
 /**
- * @file    sys/socket.h
+ * @file
  * @brief   Main socket header
  * @see     <a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_socket.h.html">
  *              The Open Group Base Specifications Issue 7, <sys/socket.h>
  *          </a>
  *
- * @author  Martin Lenders <mlenders@inf.fu-berlin.de>
+ * @author  Martine Lenders <mlenders@inf.fu-berlin.de>
  */
 #ifndef _SYS_SOCKET_H
 #define _SYS_SOCKET_H

@@ -7,11 +7,11 @@
  * directory for more details.
  */
 
-#ifndef _Z1_BOARD_H
-#define _Z1_BOARD_H
+#ifndef Z1_BOARD_H_
+#define Z1_BOARD_H_
 
 /**
- * @defgroup    board_z1 Zolertia Z1
+ * @defgroup    boards_z1 Zolertia Z1
  * @ingroup     boards
  * @brief       Support for the Zolertia Z1 board.
  *
@@ -40,7 +40,7 @@ extern "C" {
 #define __MSP430F2617__
 #endif
 
-// MSP430 core
+/*  MSP430 core */
 #define MSP430_INITIAL_CPU_SPEED    8000000uL
 #ifndef F_CPU
 #define F_CPU                       MSP430_INITIAL_CPU_SPEED
@@ -49,7 +49,7 @@ extern "C" {
 #define MSP430_HAS_DCOR             0
 #define MSP430_HAS_EXTERNAL_CRYSTAL 1
 
-// LEDs ports
+/*  LEDs ports */
 #define LEDS_PxDIR P5DIR
 #define LEDS_PxOUT P5OUT
 #define LEDS_CONF_RED      0x10
@@ -69,18 +69,16 @@ extern "C" {
 #define LED_BLUE_TOGGLE    LEDS_PxOUT ^= LEDS_CONF_BLUE
 
 
-// User-button port
+/*  User-button port */
 #define USER_BTN_PxIN      P2IN
 #define USER_BTN_MASK      0x20
 
 #define USER_BTN_PRESSED   ((USER_BTN_PxIN & USER_BTN_MASK) == 0)
 #define USER_BTN_RELEASED  ((USER_BTN_PxIN & USER_BTN_MASK) != 0)
 
-typedef uint8_t radio_packet_length_t;
-
 #ifdef __cplusplus
 }
 #endif
 
 /** @} */
-#endif // _Z1_BOARD_H
+#endif /*  Z1_BOARD_H_ */

@@ -21,7 +21,25 @@
 
 #include <stdio.h>
 
-#include "cpu-conf.h"
+#include "kernel_types.h"
+#include "board_uart0.h"
+
+kernel_pid_t uart0_handler_pid = KERNEL_PID_UNDEF;
+
+#ifdef MODULE_UART_STDIO
+
+#include "uart_stdio.h"
+
+void board_uart0_init(void){}
+int uart0_readc(void)
+{
+    char c = 0;
+    uart_stdio_read(&c, 1);
+    return c;
+}
+#else
+
+#include "cpu_conf.h"
 #include "chardev_thread.h"
 #include "ringbuffer.h"
 #include "thread.h"
@@ -29,17 +47,14 @@
 #include "posix_io.h"
 #include "irq.h"
 
-#include "board_uart0.h"
-
 #ifndef UART0_BUFSIZE
 #define UART0_BUFSIZE       (128)
 #endif
 
 /* increase when ENABLE_DEBUG in chardev_thread is set to 1! */
-#define UART0_STACKSIZE     (KERNEL_CONF_STACKSIZE_DEFAULT)
+#define UART0_STACKSIZE     (THREAD_STACKSIZE_DEFAULT)
 
 ringbuffer_t uart0_ringbuffer;
-kernel_pid_t uart0_handler_pid = KERNEL_PID_UNDEF;
 
 static char buffer[UART0_BUFSIZE];
 
@@ -51,7 +66,7 @@ void board_uart0_init(void)
     kernel_pid_t pid = thread_create(
                   uart0_thread_stack,
                   sizeof(uart0_thread_stack),
-                  PRIORITY_MAIN - 1,
+                  THREAD_PRIORITY_MAIN - 1,
                   CREATE_STACKTEST | CREATE_SLEEPING,
                   chardev_thread_entry,
                   &uart0_ringbuffer,
@@ -80,8 +95,9 @@ int uart0_readc(void)
     posix_read(uart0_handler_pid, &c, 1);
     return c;
 }
+#endif
 
-void uart0_putc(int c)
+int uart0_putc(int c)
 {
-    putchar(c);
+    return putchar(c);
 }

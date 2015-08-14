@@ -7,10 +7,10 @@
  */
 
 /**
- * @ingroup     board_arduino-mega2560
+ * @ingroup     boards_arduino-mega2560
  * @{
  *
- * @file        board.c
+ * @file
  * @brief       Board specific implementations for the Arduino Mega 2560 board
  *
  * @author      Hinnerk van Bruinehsen <h.v.bruinehsen@fu-berlin.de>
@@ -45,8 +45,8 @@ static ringbuffer_t rx_buf;
 
 void led_init(void);
 void SystemInit(void);
-static int uart_putchar(unsigned char c, FILE *stream);
-static char uart_getchar(FILE *stream);
+static int uart_putchar(char c, FILE *stream);
+static int uart_getchar(FILE *stream);
 
 static FILE uart_stdout = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
 static FILE uart_stdin = FDEV_SETUP_STREAM(NULL, uart_getchar, _FDEV_SETUP_READ);
@@ -124,13 +124,13 @@ void SystemInit(void)
     puts("\f");
 }
 
-static int uart_putchar(unsigned char c, FILE *stream)
+static int uart_putchar(char c, FILE *stream)
 {
     uart_write_blocking(UART_0, c);
     return 0;
 }
 
-char uart_getchar(FILE *stream)
+int uart_getchar(FILE *stream)
 {
 #ifndef MODULE_UART0
 

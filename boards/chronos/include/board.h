@@ -18,8 +18,8 @@
  * @author      unknwon
  */
 
-#ifndef _CHRONOS_BOARD_H
-#define _CHRONOS_BOARD_H
+#ifndef CHRONOS_BOARD_H_
+#define CHRONOS_BOARD_H_
 
 #include <stdint.h>
 
@@ -38,11 +38,9 @@ extern "C" {
 #define MSP430_HAS_DCOR             1
 #define MSP430_HAS_EXTERNAL_CRYSTAL 1
 
-typedef uint8_t radio_packet_length_t;
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _CHRONOS_BOARD_H */
+#endif /* _CHRONOS_BOARD_H_ */
 /** @} */

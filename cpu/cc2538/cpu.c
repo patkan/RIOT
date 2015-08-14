@@ -10,12 +10,14 @@
  * @ingroup     cpu_cc2538
  * @{
  *
- * @file        cpu.c
+ * @file
  * @brief       Implementation of the CPU initialization
  *
  * @author      Ian Martin <ian@locicontrols.com>
  * @}
  */
+
+#include <assert.h>
 
 #include "cpu.h"
 
@@ -39,17 +41,12 @@ static void cpu_clock_init(void);
  */
 void cpu_init(void)
 {
-    /* configure the vector table location to internal flash */
-    SCB->VTOR = FLASH_BASE;
-
+    /* initialize the Cortex-M core */
+    cortexm_init();
     /* Enable the CC2538's more compact alternate interrupt mapping */
     SYS_CTRL->I_MAP = 1;
-
     /* initialize the clock system */
     cpu_clock_init();
-
-    /* set pendSV interrupt to lowest possible priority */
-    NVIC_SetPriority(PendSV_IRQn, 0xff);
 }
 
 /**
@@ -89,4 +86,3 @@ static void cpu_clock_init(void)
     while (!SYS_CTRL->CLOCK_STAbits.SYNC_32K);
 #endif
 }
-

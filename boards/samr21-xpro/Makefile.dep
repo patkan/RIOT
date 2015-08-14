@@ -1,6 +1,4 @@
-ifneq (,$(filter defaulttransceiver,$(USEMODULE)))
-    USEMODULE += at86rf231
-    ifeq (,$(filter netdev_base,$(USEMODULE)))
-        USEMODULE += transceiver
-    endif
+ifneq (,$(filter ng_netif_default,$(USEMODULE)))
+  USEMODULE += at86rf233
+  USEMODULE += ng_nomac
 endif

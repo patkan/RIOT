@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_nucleo-l1 Nucleo-L1
+ * @defgroup    boards_nucleo-l1 Nucleo-L1
  * @ingroup     boards
  * @brief       Board specific files for the nucleo-l1 board.
  * @{
@@ -73,11 +73,6 @@ extern "C" {
 #define LED_ORANGE_OFF
 #define LED_ORANGE_TOGGLE
 /** @} */
-
-/**
- * @name Define the type for the radio packet length for the transceiver
- */
-typedef uint8_t radio_packet_length_t;
 
 /**
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO

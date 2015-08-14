@@ -9,7 +9,7 @@
  *
  * @ingroup sys_posix
  * @{
- * @file    posix_io.c
+ * @file
  * @brief   Implementation of basic POSIX IO functionality.
  * @author  Kaspar Schleiser <kaspar@schleiser.de>
  * @}
@@ -47,6 +47,9 @@ static int _posix_fileop_data(kernel_pid_t pid, int op, char *buffer, int nbytes
 
 int posix_open(int pid, int flags)
 {
+    if (pid == KERNEL_PID_UNDEF) {
+        return -1;
+    }
     return _posix_fileop((kernel_pid_t) pid, OPEN, flags);
 }
 

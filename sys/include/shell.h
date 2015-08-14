@@ -10,6 +10,11 @@
  * @defgroup    sys_shell Shell
  * @ingroup     sys
  * @brief       Simple shell interpreter
+ *
+ * @{
+ *
+ * @file
+ * @brief       Shell interface definition
  */
 
 #ifndef __SHELL_H
@@ -36,8 +41,11 @@ extern "C" {
  *                  This functionality can be used by getopt() or a similar function.
  * @param[in]       argc   Number of arguments supplied to the function invocation.
  * @param[in]       argv   The supplied argument list.
+ *
+ * @return 0 on success
+ * @return Anything else on failure
  */
-typedef void (*shell_command_handler_t)(int argc, char **argv);
+typedef int (*shell_command_handler_t)(int argc, char **argv);
 
 /**
  * @brief           A single command in the list of the supported commands.
@@ -59,7 +67,7 @@ typedef struct shell_t {
     const shell_command_t *command_list; /**< The commandlist supplied to shell_init(). */
     uint16_t shell_buffer_size;          /**< The maximum line length supplied to shell_init(). */
     int (*readchar)(void);               /**< The read function supplied to shell_init(). */
-    void (*put_char)(int);               /**< The write function supplied to shell_init(). */
+    int (*put_char)(int);                /**< The write function supplied to shell_init(). */
 } shell_t;
 
 /**
@@ -79,7 +87,7 @@ void shell_init(shell_t *shell,
                 const shell_command_t *shell_commands,
                 uint16_t shell_buffer_size,
                 int (*read_char)(void),
-                void (*put_char)(int));
+                int (*put_char)(int));
 
 /**
  * @brief           Start the shell session.
@@ -93,3 +101,4 @@ void shell_run(shell_t *shell) NORETURN;
 #endif
 
 #endif /* __SHELL_H */
+/** @} */

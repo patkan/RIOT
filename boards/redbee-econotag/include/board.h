@@ -18,8 +18,8 @@
  * @author      Thomas Eichinger <thomas.eichinger@fu-berlin.de>
  */
 
-#ifndef REDBEE_ECONOTAG_BOARD_H
-#define REDBEE_ECONOTAG_BOARD_H
+#ifndef REDBEE_ECONOTAG_BOARD_H_
+#define REDBEE_ECONOTAG_BOARD_H_
 
 #include <stdint.h>
 
@@ -27,13 +27,11 @@
 extern "C" {
 #endif
 
-#define F_CPU   (24000000)              ///< CPU target speed in Hz
+#define F_CPU   (24000000)              /**< CPU target speed in Hz */
 
 #define CTUNE       0xb
 #define IBIAS       0x1f
 #define FTUNE       0x7
-
-typedef uint8_t radio_packet_length_t;
 
 #ifdef __cplusplus
 }

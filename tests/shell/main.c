@@ -28,41 +28,32 @@
 
 #define SHELL_BUFSIZE   (UART0_BUFSIZE)
 
-static void print_teststart(int argc, char **argv)
+static int print_teststart(int argc, char **argv)
 {
     (void) argc;
     (void) argv;
     printf("[TEST_START]\n");
+
+    return 0;
 }
 
-static void print_testend(int argc, char **argv)
+static int print_testend(int argc, char **argv)
 {
     (void) argc;
     (void) argv;
     printf("[TEST_END]\n");
+
+    return 0;
 }
 
-static void print_echo(int argc, char **argv)
+static int print_echo(int argc, char **argv)
 {
     for (int i = 0; i < argc; ++i) {
         printf("“%s” ", argv[i]);
     }
     puts("");
-}
 
-static int shell_readc(void)
-{
-    char c;
-    int result = posix_read(uart0_handler_pid, &c, 1);
-    if (result != 1) {
-        return -1;
-    }
-    return (unsigned char) c;
-}
-
-static void shell_putchar(int c)
-{
-    putchar(c);
+    return 0;
 }
 
 static const shell_command_t shell_commands[] = {
@@ -83,8 +74,7 @@ int main(void)
 
     /* define own shell commands */
     shell_t shell;
-    shell_init(&shell, shell_commands, SHELL_BUFSIZE, shell_readc,
-               shell_putchar);
+    shell_init(&shell, shell_commands, SHELL_BUFSIZE, getchar, putchar);
     shell_run(&shell);
 
     /* or use only system shell commands */

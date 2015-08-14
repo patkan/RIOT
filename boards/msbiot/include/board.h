@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_msbiot MSB-IoT
+ * @defgroup    boards_msbiot MSB-IoT
  * @ingroup     boards
  * @brief       Board specific files for the MSB-IoT board
  * @{
@@ -18,8 +18,8 @@
  * @author      Fabian Nack <nack@inf.fu-berlin.de>
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "cpu.h"
 #include "periph_conf.h"
@@ -45,12 +45,19 @@ extern "C" {
  * @{
  */
 #define CC110X_SPI          SPI_0
-#define CC110X_CS           GPIO_7
-#define CC110X_GDO0         GPIO_11
-#define CC110X_GDO1         GPIO_2
-#define CC110X_GDO2         GPIO_12
+#define CC110X_CS           GPIO(PORT_B, 12)
+#define CC110X_GDO0         GPIO(PORT_C, 4)
+#define CC110X_GDO1         GPIO(PORT_A, 6)
+#define CC110X_GDO2         GPIO(PORT_C, 5)
+/** @} */
 
-typedef uint8_t radio_packet_length_t;
+/**
+ * @name Configure connected MPU-9150 device
+ * @{
+ */
+#define MPU9150_I2C         I2C_0
+#define MPU9150_HW_ADDR     (0x68)
+#define MPU9150_COMP_ADDR   (0x0E)
 /** @} */
 
 /**
@@ -96,5 +103,5 @@ void board_init(void);
 }
 #endif
 
-#endif /** __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

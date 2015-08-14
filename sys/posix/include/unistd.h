@@ -12,13 +12,13 @@
  */
 
 /**
- * @file    unistd.h
+ * @file
  * @brief   standard symbolic constants and types
  * @see     <a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/unistd.h.html">
  *              The Open Group Base Specifications Issue 7, <unistd.h>
  *          </a>
  *
- * @author  Martin Lenders <mlenders@inf.fu-berlin.de>
+ * @author  Martine Lenders <mlenders@inf.fu-berlin.de>
  */
 #ifndef _UNISTD_H
 #define _UNISTD_H

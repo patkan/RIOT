@@ -23,8 +23,8 @@
  * @author      Milan Babel <babel@inf.fu-berlin.de>
  */
 
-#ifndef _WSN_BOARD_H
-#define _WSN_BOARD_H
+#ifndef WSN_BOARD_H_
+#define WSN_BOARD_H_
 
 #include "board-conf.h"
 
@@ -69,7 +69,5 @@ extern "C" {
 
 #include <msp430x16x.h>
 
-typedef uint8_t radio_packet_length_t;
-
 /** @} */
-#endif // _WSN_BOARD_H
+#endif /* WSN_BOARD_H_ */

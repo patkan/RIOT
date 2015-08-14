@@ -28,6 +28,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
+#include <inttypes.h>
 
 #include "cpu.h"
 #include "msg.h"
@@ -47,7 +49,7 @@
 
 static volatile int main_pid;
 
-static char uart_stack[KERNEL_CONF_STACKSIZE_MAIN];
+static char uart_stack[THREAD_STACKSIZE_MAIN];
 
 static char rx_mem[128];
 static char tx_mem[128];
@@ -85,7 +87,7 @@ void *uart_thread(void *arg)
         ringbuffer_add(&tx_buf, status, strlen(status));
         uart_tx_begin(DEV);
 
-        vtimer_usleep(2000 * 1000);
+        vtimer_usleep(2000ul * 1000ul);
     }
 
     return 0;
@@ -101,7 +103,7 @@ int main(void)
     ringbuffer_init(&rx_buf, rx_mem, 128);
     ringbuffer_init(&tx_buf, tx_mem, 128);
 
-    printf("Initializing UART @ %i", BAUD);
+    printf("Initializing UART @ %" PRIu32, (uint32_t)BAUD);
     if (uart_init(DEV, BAUD, rx, tx, 0) >= 0) {
         puts("   ...done");
     }
@@ -111,7 +113,7 @@ int main(void)
     }
 
     puts("Starting timer thread that triggers UART output...");
-    thread_create(uart_stack, KERNEL_CONF_STACKSIZE_MAIN, PRIORITY_MAIN - 1,
+    thread_create(uart_stack, THREAD_STACKSIZE_MAIN, THREAD_PRIORITY_MAIN - 1,
                   0, uart_thread, 0, "uart");
 
     while (1) {

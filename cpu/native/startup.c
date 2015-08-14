@@ -35,7 +35,6 @@
 
 #include "board_internal.h"
 #include "native_internal.h"
-#include "tap.h"
 
 int _native_null_in_pipe[2];
 int _native_null_out_file;
@@ -46,6 +45,11 @@ pid_t _native_id;
 unsigned _native_rng_seed = 0;
 int _native_rng_mode = 0;
 const char *_native_unix_socket_path = NULL;
+
+#ifdef MODULE_DEV_ETH_TAP
+#include "dev_eth_tap.h"
+extern dev_eth_tap_t dev_eth_tap;
+#endif
 
 /**
  * initialize _native_null_in_pipe to allow for reading from stdin
@@ -149,6 +153,19 @@ void daemonize(void)
     }
     else {
         _native_pid = real_getpid();
+
+        /* detach from current working directory */
+        if (real_chdir("/") == -1) {
+            err(EXIT_FAILURE, "daemonize: chdir");
+        }
+
+        /* detach from process group */
+        if (real_setsid() == -1) {
+            err(EXIT_FAILURE, "daemonize: setsid");
+        }
+
+        /* set umask */
+        real_umask(0);
     }
 }
 
@@ -179,7 +196,7 @@ void usage_exit(void)
 {
     real_printf("usage: %s", _progname);
 
-#ifdef MODULE_NATIVENET
+#if defined(MODULE_DEV_ETH_TAP)
     real_printf(" <tap interface>");
 #endif
 
@@ -239,7 +256,7 @@ __attribute__((constructor)) static void startup(int argc, char **argv)
     int replay = 0;
 #endif
 
-#ifdef MODULE_NATIVENET
+#if defined(MODULE_DEV_ETH_TAP)
     if (
             (argc < 2)
             || (
@@ -348,11 +365,10 @@ __attribute__((constructor)) static void startup(int argc, char **argv)
     _native_init_uart0(stdiotype, ioparam, replay);
 #endif
 
-    native_hwtimer_pre_init();
     native_cpu_init();
     native_interrupt_init();
-#ifdef MODULE_NATIVENET
-    tap_init(argv[1]);
+#ifdef MODULE_DEV_ETH_TAP
+    dev_eth_tap_setup(&dev_eth_tap, argv[1]);
 #endif
 
     board_init();

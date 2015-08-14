@@ -7,10 +7,10 @@
  */
 
 /**
- * @ingroup     board_udoo
+ * @ingroup     boards_udoo
  * @{
  *
- * @file        board.c
+ * @file
  * @brief       Board specific implementations for the UDOO board
  *
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>

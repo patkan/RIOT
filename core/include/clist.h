@@ -10,14 +10,14 @@
  * @addtogroup  core_util
  * @{
  *
- * @file        clist.h
+ * @file
  * @brief       Circular linked list
  *
  * @author      Kaspar Schleiser <kaspar@schleiser.de>
  */
 
-#ifndef __CLIST_H
-#define __CLIST_H
+#ifndef CLIST_H
+#define CLIST_H
 
 #include "kernel_macros.h"
 
@@ -93,5 +93,5 @@ void clist_print(clist_node_t *clist);
 }
 #endif
 
-#endif /* __CLIST_H */
+#endif /* CLIST_H */
 /** @} */

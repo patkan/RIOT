@@ -30,7 +30,7 @@
  *
  * Given threads with priorities A=6, B=1, and C=3, B has the highest
  * priority.
- * 
+ *
  * A higher priority means that the scheduler will run this thread
  * whenever it becomes runnable instead of a thread with a lower
  * priority.
@@ -71,7 +71,7 @@
  *
  * @{
  *
- * @file        sched.h
+ * @file
  * @brief       Scheduler API definition
  *
  * @author      Kaspar Schleiser <kaspar@schleiser.de>
@@ -85,6 +85,7 @@
 #include "tcb.h"
 #include "attributes.h"
 #include "kernel_types.h"
+#include "native_sched.h"
 
 #ifdef __cplusplus
  extern "C" {

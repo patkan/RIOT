@@ -8,7 +8,7 @@
 
 /**
  * @defgroup socket_base    Transport layer implementation
- * 
+ *
  * @ingroup net
  * @brief   This module implements basic transport layer socket functionality.
  *          This includes 6LoWPAN UDP header compression and (experimental)
@@ -29,7 +29,7 @@
  * @file
  * @brief   transport_layer functions
  * @author  Oliver Gesch <oliver.gesch@googlemail.com>
- * @author  Martin Lenders <mlenders@inf.fu-berlin.de>
+ * @author  Martine Lenders <mlenders@inf.fu-berlin.de>
  */
 
 #ifndef SOCKET_BASE_H

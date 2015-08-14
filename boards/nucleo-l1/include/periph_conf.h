@@ -7,17 +7,17 @@
  */
 
 /**
- * @ingroup     board_nucleo-l1
+ * @ingroup     boards_nucleo-l1
  * @{
  *
- * @file        periph_conf.h
+ * @file
  * @brief       Peripheral MCU configuration for the nucleo-l1 board
  *
  * @author      Thomas Eichinger <thomas.eichinger@fu-berlin.de>
  */
 
-#ifndef __PERIPH_CONF_H
-#define __PERIPH_CONF_H
+#ifndef PERIPH_CONF_H_
+#define PERIPH_CONF_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -102,7 +102,6 @@ extern "C" {
 /**
  * @brief GPIO configuration
  */
-#define GPIO_NUMOF          16
 #define GPIO_0_EN           1
 #define GPIO_1_EN           1
 #define GPIO_2_EN           1
@@ -288,5 +287,5 @@ extern "C" {
 }
 #endif
 
-#endif /* __PERIPH_CONF_H */
+#endif /* PERIPH_CONF_H_ */
 /** @} */

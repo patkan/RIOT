@@ -10,7 +10,7 @@
  * @ingroup     sys_crypto
  * @{
  *
- * @file        3des.c
+ * @file
  * @brief       implementation of the 3DES cipher-algorithm
  *
  * @author      Freie Universitaet Berlin, Computer Systems & Telematics
@@ -40,18 +40,22 @@
 #include "crypto/3des.h"
 #include "crypto/ciphers.h"
 
+#define ENABLE_DEBUG    (0)
+#include "debug.h"
+
 /*************** GLOBALS ******************/
 /**
  * @brief Interface to the 3DES cipher
  */
-block_cipher_interface_t tripledes_interface = {
-    "3DES",
+static const cipher_interface_t tripledes_interface = {
+    THREEDES_BLOCK_SIZE,
+    THREEDES_MAX_KEY_SIZE,
     tripledes_init,
     tripledes_encrypt,
-    tripledes_decrypt,
-    tripledes_setup_key,
-    tripledes_get_preferred_block_size
+    tripledes_decrypt
 };
+const cipher_id_t CIPHER_3DES = &tripledes_interface;
+
 
 /**
  * @brief struct for the 3DES key expansion
@@ -247,15 +251,14 @@ static const uint32_t SP8[64] = {
 };
 
 
-int tripledes_init(cipher_context_t *context, uint8_t blockSize, uint8_t keySize,
-                  uint8_t *key)
+int tripledes_init(cipher_context_t *context, const uint8_t *key,
+                  uint8_t keySize)
 {
     uint8_t i;
 
-    //printf("%-40s: Entry\r\n", __FUNCTION__);
-    // 16 byte blocks only
-    if (blockSize != THREEDES_BLOCK_SIZE) {
-        printf("%-40s: blockSize != 3DES_BLOCK_SIZE...\r\n", __FUNCTION__);
+    // Make sure that context is large enough. If this is not the case,
+    // you should build with -DTHREEDES
+    if(CIPHER_MAX_CONTEXT_SIZE < THREEDES_MAX_KEY_SIZE) {
         return 0;
     }
 
@@ -275,22 +278,14 @@ int tripledes_init(cipher_context_t *context, uint8_t blockSize, uint8_t keySize
     return 1;
 }
 
-int tripledes_setup_key(cipher_context_t *context, uint8_t *key,
-                                uint8_t keysize) //To change !!!
-{
-    return tripledes_init(context, tripledes_get_preferred_block_size(),
-                         keysize, key);
-}
-
-int tripledes_encrypt(cipher_context_t *context, uint8_t *plain, uint8_t *crypt)
+int tripledes_encrypt(const cipher_context_t *context, const uint8_t *plain, uint8_t *crypt)
 {
     int res;
     struct des3_key_s *key = malloc(sizeof(des3_key_s));
     uint32_t work[2];
 
     if (!key) {
-        printf("%-40s: [ERROR] Could NOT malloc space for the des3_key_s \
-                   struct.\r\n", __FUNCTION__);
+        DEBUGF("[ERROR] Could NOT malloc space for the des3_key_s struct.\r\n");
         return -1;
     }
 
@@ -298,8 +293,7 @@ int tripledes_encrypt(cipher_context_t *context, uint8_t *plain, uint8_t *crypt)
     res = des3_key_setup(context->context, key);
 
     if (res < 0) {
-        printf("%-40s: [ERROR] des3_key_setup failed with Code %i\r\n",
-               __FUNCTION__, res);
+        DEBUGF("[ERROR] des3_key_setup failed with Code %i\r\n", res);
         free(key);
         return -2;
     }
@@ -317,15 +311,14 @@ int tripledes_encrypt(cipher_context_t *context, uint8_t *plain, uint8_t *crypt)
 }
 
 
-int tripledes_decrypt(cipher_context_t *context, uint8_t *crypt, uint8_t *plain)
+int tripledes_decrypt(const cipher_context_t *context, const uint8_t *crypt, uint8_t *plain)
 {
     int res;
     struct des3_key_s *key = malloc(sizeof(des3_key_s));
     uint32_t work[2];
 
     if (!key) {
-        printf("%-40s: [ERROR] Could NOT malloc space for the des3_key_s \
-                        struct.\r\n", __FUNCTION__);
+        DEBUGF("[ERROR] Could NOT malloc space for the des3_key_s struct.\r\n");
         return -1;
     }
 
@@ -333,8 +326,7 @@ int tripledes_decrypt(cipher_context_t *context, uint8_t *crypt, uint8_t *plain)
     res = des3_key_setup(context->context, key);
 
     if (res < 0) {
-        printf("%-40s: [ERROR] des3_key_setup failed with Code %i\r\n",
-               __FUNCTION__, res);
+        DEBUGF("[ERROR] des3_key_setup failed with Code %i\r\n", res);
         free(key);
         return -2;
     }
@@ -349,11 +341,6 @@ int tripledes_decrypt(cipher_context_t *context, uint8_t *crypt, uint8_t *plain)
 
     free(key);
     return 1;
-}
-
-uint8_t tripledes_get_preferred_block_size(void)
-{
-    return THREEDES_BLOCK_SIZE;
 }
 
 static void cookey(const uint32_t *raw1, uint32_t *keyout)

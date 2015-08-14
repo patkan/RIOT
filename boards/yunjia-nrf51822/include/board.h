@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_yunjia-nrf51822 Yunjia NRF51822
+ * @defgroup    boards_yunjia-nrf51822 Yunjia NRF51822
  * @ingroup     boards
  * @brief       Board specific files for the Yunjia NRF51822 board
  * @{
@@ -18,8 +18,8 @@
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "cpu.h"
 
@@ -72,5 +72,5 @@ void board_init(void);
 }
 #endif
 
-#endif /** __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

@@ -22,6 +22,10 @@
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
+#ifndef KINETIS_SPI_USE_HW_CS
+#define KINETIS_SPI_USE_HW_CS   0
+#endif
+
 /**
  * @ingroup     cpu_kinetis_common_spi
  *
@@ -80,21 +84,21 @@
 #define SPI_1_SCK_PORT          SPI_1_PORT
 #define SPI_1_SOUT_PORT         SPI_1_PORT
 #define SPI_1_SIN_PORT          SPI_1_PORT
-#define SPI_1_PCS1_PORT         SPI_1_PORT
+#define SPI_1_PCS0_PORT         SPI_1_PORT
 #endif
 
 #ifdef SPI_1_PORT_CLKEN
 #define SPI_1_SCK_PORT_CLKEN    SPI_1_PORT_CLKEN
 #define SPI_1_SOUT_PORT_CLKEN   SPI_1_PORT_CLKEN
 #define SPI_1_SIN_PORT_CLKEN    SPI_1_PORT_CLKEN
-#define SPI_1_PCS1_PORT_CLKEN   SPI_1_PORT_CLKEN
+#define SPI_1_PCS0_PORT_CLKEN   SPI_1_PORT_CLKEN
 #endif
 
 #ifdef SPI_1_AF
 #define SPI_1_SCK_AF            SPI_1_AF
 #define SPI_1_SOUT_AF           SPI_1_AF
 #define SPI_1_SIN_AF            SPI_1_AF
-#define SPI_1_PCS1_AF           SPI_1_AF
+#define SPI_1_PCS0_AF           SPI_1_AF
 #endif
 
 #ifndef SPI_1_TCSC_FREQ
@@ -115,21 +119,21 @@
 #define SPI_2_SCK_PORT          SPI_2_PORT
 #define SPI_2_SOUT_PORT         SPI_2_PORT
 #define SPI_2_SIN_PORT          SPI_2_PORT
-#define SPI_2_PCS2_PORT         SPI_2_PORT
+#define SPI_2_PCS0_PORT         SPI_2_PORT
 #endif
 
 #ifdef SPI_2_PORT_CLKEN
 #define SPI_2_SCK_PORT_CLKEN    SPI_2_PORT_CLKEN
 #define SPI_2_SOUT_PORT_CLKEN   SPI_2_PORT_CLKEN
 #define SPI_2_SIN_PORT_CLKEN    SPI_2_PORT_CLKEN
-#define SPI_2_PCS2_PORT_CLKEN   SPI_2_PORT_CLKEN
+#define SPI_2_PCS0_PORT_CLKEN   SPI_2_PORT_CLKEN
 #endif
 
 #ifdef SPI_2_AF
 #define SPI_2_SCK_AF            SPI_2_AF
 #define SPI_2_SOUT_AF           SPI_2_AF
 #define SPI_2_SIN_AF            SPI_2_AF
-#define SPI_2_PCS2_AF           SPI_2_AF
+#define SPI_2_PCS0_AF           SPI_2_AF
 #endif
 
 #ifndef SPI_2_TCSC_FREQ
@@ -150,21 +154,21 @@
 #define SPI_3_SCK_PORT          SPI_3_PORT
 #define SPI_3_SOUT_PORT         SPI_3_PORT
 #define SPI_3_SIN_PORT          SPI_3_PORT
-#define SPI_3_PCS3_PORT         SPI_3_PORT
+#define SPI_3_PCS0_PORT         SPI_3_PORT
 #endif
 
 #ifdef SPI_3_PORT_CLKEN
 #define SPI_3_SCK_PORT_CLKEN    SPI_3_PORT_CLKEN
 #define SPI_3_SOUT_PORT_CLKEN   SPI_3_PORT_CLKEN
 #define SPI_3_SIN_PORT_CLKEN    SPI_3_PORT_CLKEN
-#define SPI_3_PCS3_PORT_CLKEN   SPI_3_PORT_CLKEN
+#define SPI_3_PCS0_PORT_CLKEN   SPI_3_PORT_CLKEN
 #endif
 
 #ifdef SPI_3_AF
 #define SPI_3_SCK_AF            SPI_3_AF
 #define SPI_3_SOUT_AF           SPI_3_AF
 #define SPI_3_SIN_AF            SPI_3_AF
-#define SPI_3_PCS3_AF           SPI_3_AF
+#define SPI_3_PCS0_AF           SPI_3_AF
 #endif
 
 #ifndef SPI_3_TCSC_FREQ
@@ -185,21 +189,21 @@
 #define SPI_4_SCK_PORT          SPI_4_PORT
 #define SPI_4_SOUT_PORT         SPI_4_PORT
 #define SPI_4_SIN_PORT          SPI_4_PORT
-#define SPI_4_PCS4_PORT         SPI_4_PORT
+#define SPI_4_PCS0_PORT         SPI_4_PORT
 #endif
 
 #ifdef SPI_4_PORT_CLKEN
 #define SPI_4_SCK_PORT_CLKEN    SPI_4_PORT_CLKEN
 #define SPI_4_SOUT_PORT_CLKEN   SPI_4_PORT_CLKEN
 #define SPI_4_SIN_PORT_CLKEN    SPI_4_PORT_CLKEN
-#define SPI_4_PCS4_PORT_CLKEN   SPI_4_PORT_CLKEN
+#define SPI_4_PCS0_PORT_CLKEN   SPI_4_PORT_CLKEN
 #endif
 
 #ifdef SPI_4_AF
 #define SPI_4_SCK_AF            SPI_4_AF
 #define SPI_4_SOUT_AF           SPI_4_AF
 #define SPI_4_SIN_AF            SPI_4_AF
-#define SPI_4_PCS4_AF           SPI_4_AF
+#define SPI_4_PCS0_AF           SPI_4_AF
 #endif
 
 #ifndef SPI_4_TCSC_FREQ
@@ -220,21 +224,21 @@
 #define SPI_5_SCK_PORT          SPI_5_PORT
 #define SPI_5_SOUT_PORT         SPI_5_PORT
 #define SPI_5_SIN_PORT          SPI_5_PORT
-#define SPI_5_PCS5_PORT         SPI_5_PORT
+#define SPI_5_PCS0_PORT         SPI_5_PORT
 #endif
 
 #ifdef SPI_5_PORT_CLKEN
 #define SPI_5_SCK_PORT_CLKEN    SPI_5_PORT_CLKEN
 #define SPI_5_SOUT_PORT_CLKEN   SPI_5_PORT_CLKEN
 #define SPI_5_SIN_PORT_CLKEN    SPI_5_PORT_CLKEN
-#define SPI_5_PCS5_PORT_CLKEN   SPI_5_PORT_CLKEN
+#define SPI_5_PCS0_PORT_CLKEN   SPI_5_PORT_CLKEN
 #endif
 
 #ifdef SPI_5_AF
 #define SPI_5_SCK_AF            SPI_5_AF
 #define SPI_5_SOUT_AF           SPI_5_AF
 #define SPI_5_SIN_AF            SPI_5_AF
-#define SPI_5_PCS5_AF           SPI_5_AF
+#define SPI_5_PCS0_AF           SPI_5_AF
 #endif
 
 #ifndef SPI_5_TCSC_FREQ
@@ -255,21 +259,21 @@
 #define SPI_6_SCK_PORT          SPI_6_PORT
 #define SPI_6_SOUT_PORT         SPI_6_PORT
 #define SPI_6_SIN_PORT          SPI_6_PORT
-#define SPI_6_PCS6_PORT         SPI_6_PORT
+#define SPI_6_PCS0_PORT         SPI_6_PORT
 #endif
 
 #ifdef SPI_6_PORT_CLKEN
 #define SPI_6_SCK_PORT_CLKEN    SPI_6_PORT_CLKEN
 #define SPI_6_SOUT_PORT_CLKEN   SPI_6_PORT_CLKEN
 #define SPI_6_SIN_PORT_CLKEN    SPI_6_PORT_CLKEN
-#define SPI_6_PCS6_PORT_CLKEN   SPI_6_PORT_CLKEN
+#define SPI_6_PCS0_PORT_CLKEN   SPI_6_PORT_CLKEN
 #endif
 
 #ifdef SPI_6_AF
 #define SPI_6_SCK_AF            SPI_6_AF
 #define SPI_6_SOUT_AF           SPI_6_AF
 #define SPI_6_SIN_AF            SPI_6_AF
-#define SPI_6_PCS6_AF           SPI_6_AF
+#define SPI_6_PCS0_AF           SPI_6_AF
 #endif
 
 #ifndef SPI_6_TCSC_FREQ
@@ -290,21 +294,21 @@
 #define SPI_7_SCK_PORT          SPI_7_PORT
 #define SPI_7_SOUT_PORT         SPI_7_PORT
 #define SPI_7_SIN_PORT          SPI_7_PORT
-#define SPI_7_PCS7_PORT         SPI_7_PORT
+#define SPI_7_PCS0_PORT         SPI_7_PORT
 #endif
 
 #ifdef SPI_7_PORT_CLKEN
 #define SPI_7_SCK_PORT_CLKEN    SPI_7_PORT_CLKEN
 #define SPI_7_SOUT_PORT_CLKEN   SPI_7_PORT_CLKEN
 #define SPI_7_SIN_PORT_CLKEN    SPI_7_PORT_CLKEN
-#define SPI_7_PCS7_PORT_CLKEN   SPI_7_PORT_CLKEN
+#define SPI_7_PCS0_PORT_CLKEN   SPI_7_PORT_CLKEN
 #endif
 
 #ifdef SPI_7_AF
 #define SPI_7_SCK_AF            SPI_7_AF
 #define SPI_7_SOUT_AF           SPI_7_AF
 #define SPI_7_SIN_AF            SPI_7_AF
-#define SPI_7_PCS7_AF           SPI_7_AF
+#define SPI_7_PCS0_AF           SPI_7_AF
 #endif
 
 #ifndef SPI_7_TCSC_FREQ
@@ -320,11 +324,39 @@
 #endif
 #endif /* SPI_7_EN */
 
+#define KINETIS_CFG_SPI_IO(num)    \
+            spi_dev = SPI_ ## num ## _DEV;\
+            module_clock = SPI_ ## num ## _FREQ;\
+            tcsc_freq = SPI_ ## num ## _TCSC_FREQ;\
+            tasc_freq = SPI_ ## num ## _TASC_FREQ;\
+            tdt_freq = SPI_ ## num ## _TDT_FREQ;\
+            ctas = SPI_ ## num ## _CTAS;\
+            /* enable clocks */\
+            SPI_ ## num ## _CLKEN();\
+            SPI_ ## num ## _SCK_PORT_CLKEN();\
+            SPI_ ## num ## _SOUT_PORT_CLKEN();\
+            SPI_ ## num ## _SIN_PORT_CLKEN();\
+            /* Set PORT to AF mode */\
+            SPI_ ## num ## _SCK_PORT->PCR[SPI_ ## num ## _SCK_PIN] =\
+                PORT_PCR_MUX(SPI_ ## num ## _SCK_AF);\
+            SPI_ ## num ## _SOUT_PORT->PCR[SPI_ ## num ## _SOUT_PIN] =\
+                PORT_PCR_MUX(SPI_ ## num ## _SOUT_AF);\
+            SPI_ ## num ## _SIN_PORT->PCR[SPI_ ## num ## _SIN_PIN] =\
+                PORT_PCR_MUX(SPI_ ## num ## _SIN_AF);\
+            if (KINETIS_SPI_USE_HW_CS) {\
+                SPI_ ## num ## _PCS0_PORT_CLKEN();\
+                SPI_ ## num ## _PCS0_PORT->PCR[SPI_ ## num ## _PCS0_PIN] =\
+                    PORT_PCR_MUX(SPI_ ## num ## _PCS0_AF);\
+            }
+
 /**
  * @brief Array holding one pre-initialized mutex for each hardware SPI device
  */
-/* TODO: Avoid adding duplicate entries with the same index. GCC warns about it
- * but it works. It does look strange in the preprocessed output, however.
+/* We try to avoid adding duplicate entries with the same index by comparing the
+ * SPI_x_INDEX macros, the #if statements become quite long though.
+ *
+ * If not checking for multiple initializations GCC will warn about it
+ * but the binary still works. It does look strange in the preprocessed output, however.
  *
  * The warning message is:
  * warning: initialized field overwritten [-Woverride-init]
@@ -342,25 +374,34 @@ static mutex_t locks[] =  {
 #if SPI_0_EN
     [SPI_0_INDEX] = MUTEX_INIT,
 #endif
-#if SPI_1_EN
+#if SPI_1_EN && (SPI_1_INDEX != SPI_0_INDEX)
     [SPI_1_INDEX] = MUTEX_INIT,
 #endif
-#if SPI_2_EN
+#if SPI_2_EN && (SPI_2_INDEX != SPI_0_INDEX) && (SPI_2_INDEX != SPI_1_INDEX)
     [SPI_2_INDEX] = MUTEX_INIT,
 #endif
-#if SPI_3_EN
+#if SPI_3_EN && (SPI_3_INDEX != SPI_0_INDEX) && (SPI_3_INDEX != SPI_1_INDEX) \
+    && (SPI_3_INDEX != SPI_2_INDEX)
     [SPI_3_INDEX] = MUTEX_INIT,
 #endif
-#if SPI_4_EN
+#if SPI_4_EN && (SPI_4_INDEX != SPI_0_INDEX) && (SPI_4_INDEX != SPI_1_INDEX) \
+    && (SPI_4_INDEX != SPI_2_INDEX) && (SPI_4_INDEX != SPI_3_INDEX)
     [SPI_4_INDEX] = MUTEX_INIT,
 #endif
-#if SPI_5_EN
+#if SPI_5_EN && (SPI_5_INDEX != SPI_0_INDEX) && (SPI_5_INDEX != SPI_1_INDEX) \
+    && (SPI_5_INDEX != SPI_2_INDEX) && (SPI_5_INDEX != SPI_3_INDEX) \
+    && (SPI_5_INDEX != SPI_4_INDEX)
     [SPI_5_INDEX] = MUTEX_INIT,
 #endif
-#if SPI_6_EN
+#if SPI_6_EN && (SPI_6_INDEX != SPI_0_INDEX) && (SPI_6_INDEX != SPI_1_INDEX) \
+    && (SPI_6_INDEX != SPI_2_INDEX) && (SPI_6_INDEX != SPI_3_INDEX) \
+    && (SPI_6_INDEX != SPI_4_INDEX) && (SPI_6_INDEX != SPI_5_INDEX)
     [SPI_6_INDEX] = MUTEX_INIT,
 #endif
-#if SPI_7_EN
+#if SPI_7_EN && (SPI_7_INDEX != SPI_0_INDEX) && (SPI_7_INDEX != SPI_1_INDEX) \
+    && (SPI_7_INDEX != SPI_2_INDEX) && (SPI_7_INDEX != SPI_3_INDEX) \
+    && (SPI_7_INDEX != SPI_4_INDEX) && (SPI_7_INDEX != SPI_5_INDEX) \
+    && (SPI_7_INDEX != SPI_6_INDEX)
     [SPI_7_INDEX] = MUTEX_INIT,
 #endif
 };
@@ -435,12 +476,12 @@ static spi_state_t spi_config[SPI_NUMOF];
  * @return The actual achieved frequency on success
  * @return Less than 0 on error.
  */
-static int find_closest_baudrate_scalers(const uint32_t module_clock, const uint32_t target_clock,
+static long find_closest_baudrate_scalers(const uint32_t module_clock, const long target_clock,
         uint8_t *closest_prescaler, uint8_t *closest_scaler)
 {
     uint8_t i;
     uint8_t k;
-    int freq;
+    long freq;
     static const uint8_t num_scalers = 16;
     static const uint8_t num_prescalers = 4;
     static const int br_scalers[16] = {
@@ -449,7 +490,7 @@ static int find_closest_baudrate_scalers(const uint32_t module_clock, const uint
     };
     static const int br_prescalers[4] = {2, 3, 5, 7};
 
-    int closest_frequency = -1;
+    long closest_frequency = -1;
 
     /* Test all combinations until we arrive close to the target clock */
     for (i = 0; i < num_prescalers; ++i) {
@@ -504,18 +545,18 @@ static int find_closest_baudrate_scalers(const uint32_t module_clock, const uint
  * @return The actual achieved frequency on success
  * @return Less than 0 on error.
  */
-static int find_closest_delay_scalers(const uint32_t module_clock, const uint32_t target_freq,
+static long find_closest_delay_scalers(const uint32_t module_clock, const long target_freq,
                                       uint8_t *closest_prescaler, uint8_t *closest_scaler)
 {
     uint8_t i;
     uint8_t k;
-    int freq;
+    long freq;
     int prescaler;
     int scaler;
     static const uint8_t num_scalers = 16;
     static const uint8_t num_prescalers = 4;
 
-    int closest_frequency = -1;
+    long closest_frequency = -1;
 
     /* Test all combinations until we arrive close to the target clock */
     for (i = 0; i < num_prescalers; ++i) {
@@ -592,168 +633,56 @@ int spi_init_master(spi_t dev, spi_conf_t conf, spi_speed_t speed)
 #if SPI_0_EN
 
         case SPI_0:
-            spi_dev = SPI_0_DEV;
-            module_clock = SPI_0_FREQ;
-            tcsc_freq = SPI_0_TCSC_FREQ;
-            tasc_freq = SPI_0_TASC_FREQ;
-            tdt_freq = SPI_0_TDT_FREQ;
-            ctas = SPI_0_CTAS;
-            /* enable clocks */
-            SPI_0_CLKEN();
-            SPI_0_SCK_PORT_CLKEN();
-            SPI_0_SOUT_PORT_CLKEN();
-            SPI_0_SIN_PORT_CLKEN();
-            /* Set PORT to AF mode */
-            SPI_0_SCK_PORT->PCR[SPI_0_SCK_PIN] = PORT_PCR_MUX(SPI_0_SCK_AF);
-            SPI_0_SOUT_PORT->PCR[SPI_0_SOUT_PIN] = PORT_PCR_MUX(SPI_0_SOUT_AF);
-            SPI_0_SIN_PORT->PCR[SPI_0_SIN_PIN] = PORT_PCR_MUX(SPI_0_SIN_AF);
+            KINETIS_CFG_SPI_IO(0);
             break;
 #endif /* SPI_0_EN */
 
 #if SPI_1_EN
 
         case SPI_1:
-            spi_dev = SPI_1_DEV;
-            module_clock = SPI_1_FREQ;
-            tcsc_freq = SPI_1_TCSC_FREQ;
-            tasc_freq = SPI_1_TASC_FREQ;
-            tdt_freq = SPI_1_TDT_FREQ;
-            ctas = SPI_1_CTAS;
-            /* enable clocks */
-            SPI_1_CLKEN();
-            SPI_1_SCK_PORT_CLKEN();
-            SPI_1_SOUT_PORT_CLKEN();
-            SPI_1_SIN_PORT_CLKEN();
-            /* Set PORT to AF mode */
-            SPI_1_SCK_PORT->PCR[SPI_1_SCK_PIN] = PORT_PCR_MUX(SPI_1_SCK_AF);
-            SPI_1_SOUT_PORT->PCR[SPI_1_SOUT_PIN] = PORT_PCR_MUX(SPI_1_SOUT_AF);
-            SPI_1_SIN_PORT->PCR[SPI_1_SIN_PIN] = PORT_PCR_MUX(SPI_1_SIN_AF);
+            KINETIS_CFG_SPI_IO(1);
             break;
 #endif /* SPI_1_EN */
 
 #if SPI_2_EN
 
         case SPI_2:
-            spi_dev = SPI_2_DEV;
-            module_clock = SPI_2_FREQ;
-            tcsc_freq = SPI_2_TCSC_FREQ;
-            tasc_freq = SPI_2_TASC_FREQ;
-            tdt_freq = SPI_2_TDT_FREQ;
-            ctas = SPI_2_CTAS;
-            /* enable clocks */
-            SPI_2_CLKEN();
-            SPI_2_SCK_PORT_CLKEN();
-            SPI_2_SOUT_PORT_CLKEN();
-            SPI_2_SIN_PORT_CLKEN();
-            /* Set PORT to AF mode */
-            SPI_2_SCK_PORT->PCR[SPI_2_SCK_PIN] = PORT_PCR_MUX(SPI_2_SCK_AF);
-            SPI_2_SOUT_PORT->PCR[SPI_2_SOUT_PIN] = PORT_PCR_MUX(SPI_2_SOUT_AF);
-            SPI_2_SIN_PORT->PCR[SPI_2_SIN_PIN] = PORT_PCR_MUX(SPI_2_SIN_AF);
+            KINETIS_CFG_SPI_IO(2);
             break;
 #endif /* SPI_2_EN */
 
 #if SPI_3_EN
 
         case SPI_3:
-            spi_dev = SPI_3_DEV;
-            module_clock = SPI_3_FREQ;
-            tcsc_freq = SPI_3_TCSC_FREQ;
-            tasc_freq = SPI_3_TASC_FREQ;
-            tdt_freq = SPI_3_TDT_FREQ;
-            ctas = SPI_3_CTAS;
-            /* enable clocks */
-            SPI_3_CLKEN();
-            SPI_3_SCK_PORT_CLKEN();
-            SPI_3_SOUT_PORT_CLKEN();
-            SPI_3_SIN_PORT_CLKEN();
-            /* Set PORT to AF mode */
-            SPI_3_SCK_PORT->PCR[SPI_3_SCK_PIN] = PORT_PCR_MUX(SPI_3_SCK_AF);
-            SPI_3_SOUT_PORT->PCR[SPI_3_SOUT_PIN] = PORT_PCR_MUX(SPI_3_SOUT_AF);
-            SPI_3_SIN_PORT->PCR[SPI_3_SIN_PIN] = PORT_PCR_MUX(SPI_3_SIN_AF);
+            KINETIS_CFG_SPI_IO(3);
             break;
 #endif /* SPI_3_EN */
 
 #if SPI_4_EN
 
         case SPI_4:
-            spi_dev = SPI_4_DEV;
-            module_clock = SPI_4_FREQ;
-            tcsc_freq = SPI_4_TCSC_FREQ;
-            tasc_freq = SPI_4_TASC_FREQ;
-            tdt_freq = SPI_4_TDT_FREQ;
-            ctas = SPI_4_CTAS;
-            /* enable clocks */
-            SPI_4_CLKEN();
-            SPI_4_SCK_PORT_CLKEN();
-            SPI_4_SOUT_PORT_CLKEN();
-            SPI_4_SIN_PORT_CLKEN();
-            /* Set PORT to AF mode */
-            SPI_4_SCK_PORT->PCR[SPI_4_SCK_PIN] = PORT_PCR_MUX(SPI_4_SCK_AF);
-            SPI_4_SOUT_PORT->PCR[SPI_4_SOUT_PIN] = PORT_PCR_MUX(SPI_4_SOUT_AF);
-            SPI_4_SIN_PORT->PCR[SPI_4_SIN_PIN] = PORT_PCR_MUX(SPI_4_SIN_AF);
+            KINETIS_CFG_SPI_IO(4);
             break;
 #endif /* SPI_4_EN */
 
 #if SPI_5_EN
 
         case SPI_5:
-            spi_dev = SPI_5_DEV;
-            module_clock = SPI_5_FREQ;
-            tcsc_freq = SPI_5_TCSC_FREQ;
-            tasc_freq = SPI_5_TASC_FREQ;
-            tdt_freq = SPI_5_TDT_FREQ;
-            ctas = SPI_5_CTAS;
-            /* enable clocks */
-            SPI_5_CLKEN();
-            SPI_5_SCK_PORT_CLKEN();
-            SPI_5_SOUT_PORT_CLKEN();
-            SPI_5_SIN_PORT_CLKEN();
-            /* Set PORT to AF mode */
-            SPI_5_SCK_PORT->PCR[SPI_5_SCK_PIN] = PORT_PCR_MUX(SPI_5_SCK_AF);
-            SPI_5_SOUT_PORT->PCR[SPI_5_SOUT_PIN] = PORT_PCR_MUX(SPI_5_SOUT_AF);
-            SPI_5_SIN_PORT->PCR[SPI_5_SIN_PIN] = PORT_PCR_MUX(SPI_5_SIN_AF);
+            KINETIS_CFG_SPI_IO(5);
             break;
 #endif /* SPI_5_EN */
 
 #if SPI_6_EN
 
         case SPI_6:
-            spi_dev = SPI_6_DEV;
-            module_clock = SPI_6_FREQ;
-            tcsc_freq = SPI_6_TCSC_FREQ;
-            tasc_freq = SPI_6_TASC_FREQ;
-            tdt_freq = SPI_6_TDT_FREQ;
-            ctas = SPI_6_CTAS;
-            /* enable clocks */
-            SPI_6_CLKEN();
-            SPI_6_SCK_PORT_CLKEN();
-            SPI_6_SOUT_PORT_CLKEN();
-            SPI_6_SIN_PORT_CLKEN();
-            /* Set PORT to AF mode */
-            SPI_6_SCK_PORT->PCR[SPI_6_SCK_PIN] = PORT_PCR_MUX(SPI_6_SCK_AF);
-            SPI_6_SOUT_PORT->PCR[SPI_6_SOUT_PIN] = PORT_PCR_MUX(SPI_6_SOUT_AF);
-            SPI_6_SIN_PORT->PCR[SPI_6_SIN_PIN] = PORT_PCR_MUX(SPI_6_SIN_AF);
+            KINETIS_CFG_SPI_IO(6);
             break;
 #endif /* SPI_6_EN */
 
 #if SPI_7_EN
 
         case SPI_7:
-            spi_dev = SPI_7_DEV;
-            module_clock = SPI_7_FREQ;
-            tcsc_freq = SPI_7_TCSC_FREQ;
-            tasc_freq = SPI_7_TASC_FREQ;
-            tdt_freq = SPI_7_TDT_FREQ;
-            ctas = SPI_7_CTAS;
-            /* enable clocks */
-            SPI_7_CLKEN();
-            SPI_7_SCK_PORT_CLKEN();
-            SPI_7_SOUT_PORT_CLKEN();
-            SPI_7_SIN_PORT_CLKEN();
-            /* Set PORT to AF mode */
-            SPI_7_SCK_PORT->PCR[SPI_7_SCK_PIN] = PORT_PCR_MUX(SPI_7_SCK_AF);
-            SPI_7_SOUT_PORT->PCR[SPI_7_SOUT_PIN] = PORT_PCR_MUX(SPI_7_SOUT_AF);
-            SPI_7_SIN_PORT->PCR[SPI_7_SIN_PIN] = PORT_PCR_MUX(SPI_7_SIN_AF);
+            KINETIS_CFG_SPI_IO(7);
             break;
 #endif /* SPI_7_EN */
 
@@ -844,6 +773,10 @@ int spi_init_master(spi_t dev, spi_conf_t conf, spi_speed_t speed)
                    | SPI_MCR_CLR_TXF_MASK
                    | SPI_MCR_CLR_RXF_MASK;
 
+    if (KINETIS_SPI_USE_HW_CS) {
+        spi_dev->MCR |= SPI_MCR_PCSIS(1);
+    }
+
     spi_dev->RSER = (uint32_t)0;
 
     return 0;
@@ -911,12 +844,15 @@ int spi_init_slave(spi_t dev, spi_conf_t conf, char(*cb)(char data))
 
     spi_dev->RSER = (uint32_t)0;
 
+    /* set callback */
+    spi_config[dev].cb = cb;
+
     return 0;
 }
 
 int spi_acquire(spi_t dev)
 {
-    if (dev >= SPI_NUMOF) {
+    if ((unsigned int)dev >= SPI_NUMOF) {
         return -1;
     }
 
@@ -926,7 +862,7 @@ int spi_acquire(spi_t dev)
 
 int spi_release(spi_t dev)
 {
-    if (dev >= SPI_NUMOF) {
+    if ((unsigned int)dev >= SPI_NUMOF) {
         return -1;
     }
 
@@ -939,7 +875,11 @@ static inline uint8_t spi_transfer_internal(SPI_Type *spi_dev, uint32_t flags, u
     /* Wait until there is space in the TXFIFO */
     while (!(spi_dev->SR & SPI_SR_TFFF_MASK));
 
+#if KINETIS_SPI_USE_HW_CS
+    spi_dev->PUSHR = flags | SPI_PUSHR_TXDATA(byte_out) | SPI_PUSHR_PCS(1);
+#else
     spi_dev->PUSHR = flags | SPI_PUSHR_TXDATA(byte_out);
+#endif
 
     /* Wait until we have received a byte */
     while (!(spi_dev->SR & SPI_SR_RXCTR_MASK));
@@ -1116,13 +1056,13 @@ int spi_transfer_bytes(spi_t dev, char *out, char *in, unsigned int length)
     /* Default: send idle data */
     byte_out = (uint8_t)SPI_IDLE_DATA;
 
-    for (i = 0; i < length; i++) {
+    for (i = 0; i < (int)length; i++) {
         if (out != NULL) {
             /* Send given out data */
             byte_out = (uint8_t)out[i];
         }
 
-        if (i >= length - 1) {
+        if (i >= (int)length - 1) {
             /* Last byte, set End-of-Queue flag, clear Continue flag. */
             flags &= ~(SPI_PUSHR_CONT_MASK);
             flags |= SPI_PUSHR_EOQ_MASK;
@@ -1318,18 +1258,18 @@ int spi_transfer_regs(spi_t dev, uint8_t reg, char *out, char *in, unsigned int 
     byte_out = reg;
 
     /* Send register address */
-    byte_in = spi_transfer_internal(spi_dev, flags, byte_out);
+    spi_transfer_internal(spi_dev, flags, byte_out);
 
     /* Default: send idle data */
     byte_out = (uint8_t)SPI_IDLE_DATA;
 
-    for (i = 0; i < length; i++) {
+    for (i = 0; i < (int)length; i++) {
         if (out != NULL) {
             /* Send given out data */
             byte_out = (uint8_t)out[i];
         }
 
-        if (i >= length - 1) {
+        if (i >= (int)length - 1) {
             /* Last byte, set End-of-Queue flag, clear Continue flag. */
             flags &= ~(SPI_PUSHR_CONT_MASK);
             flags |= SPI_PUSHR_EOQ_MASK;
@@ -1357,6 +1297,62 @@ void spi_transmission_begin(spi_t dev, char reset_val)
 
         case SPI_0:
             SPI_0_DEV->PUSHR = SPI_PUSHR_CTAS(SPI_0_CTAS)
+                               | SPI_PUSHR_EOQ_MASK
+                               | SPI_PUSHR_TXDATA(reset_val);
+            break;
+#endif
+#if SPI_1_EN
+
+        case SPI_1:
+            SPI_1_DEV->PUSHR = SPI_PUSHR_CTAS(SPI_1_CTAS)
+                               | SPI_PUSHR_EOQ_MASK
+                               | SPI_PUSHR_TXDATA(reset_val);
+            break;
+#endif
+#if SPI_2_EN
+
+        case SPI_2:
+            SPI_2_DEV->PUSHR = SPI_PUSHR_CTAS(SPI_2_CTAS)
+                               | SPI_PUSHR_EOQ_MASK
+                               | SPI_PUSHR_TXDATA(reset_val);
+            break;
+#endif
+#if SPI_3_EN
+
+        case SPI_3:
+            SPI_3_DEV->PUSHR = SPI_PUSHR_CTAS(SPI_3_CTAS)
+                               | SPI_PUSHR_EOQ_MASK
+                               | SPI_PUSHR_TXDATA(reset_val);
+            break;
+#endif
+#if SPI_4_EN
+
+        case SPI_4:
+            SPI_4_DEV->PUSHR = SPI_PUSHR_CTAS(SPI_4_CTAS)
+                               | SPI_PUSHR_EOQ_MASK
+                               | SPI_PUSHR_TXDATA(reset_val);
+            break;
+#endif
+#if SPI_5_EN
+
+        case SPI_5:
+            SPI_5_DEV->PUSHR = SPI_PUSHR_CTAS(SPI_5_CTAS)
+                               | SPI_PUSHR_EOQ_MASK
+                               | SPI_PUSHR_TXDATA(reset_val);
+            break;
+#endif
+#if SPI_6_EN
+
+        case SPI_6:
+            SPI_6_DEV->PUSHR = SPI_PUSHR_CTAS(SPI_6_CTAS)
+                               | SPI_PUSHR_EOQ_MASK
+                               | SPI_PUSHR_TXDATA(reset_val);
+            break;
+#endif
+#if SPI_7_EN
+
+        case SPI_7:
+            SPI_7_DEV->PUSHR = SPI_PUSHR_CTAS(SPI_7_CTAS)
                                | SPI_PUSHR_EOQ_MASK
                                | SPI_PUSHR_TXDATA(reset_val);
             break;

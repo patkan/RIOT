@@ -12,13 +12,13 @@
  */
 
 /**
- * @file    netinet/in.h
+ * @file
  * @brief   Main socket header
  * @see     <a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/netinet_in.h.html">
  *              The Open Group Base Specifications Issue 7, <netinet/in.h>
  *          </a>
  *
- * @author  Martin Lenders <mlenders@inf.fu-berlin.de>
+ * @author  Martine Lenders <mlenders@inf.fu-berlin.de>
  */
 #ifndef _NETINET_IN_H
 #define _NETINET_IN_H
@@ -26,7 +26,7 @@
 #include <inttypes.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include "ipv6.h"
+#include "net/ng_ipv6.h"
 #include "socket_base/socket.h"
 
 #ifdef __cplusplus

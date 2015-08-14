@@ -13,7 +13,7 @@
  * @file
  * @brief GET_CPU_ID() test application
  *
- * @author Martin Lenders <mlenders@inf.fu-berlin.de>
+ * @author Martine Lenders <mlenders@inf.fu-berlin.de>
  * @author Hauke Petersen <hauke.petersen@fu-berlin.de>
  *
  * @}
@@ -22,7 +22,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "cpu-conf.h"
+#include "cpu_conf.h"
 #include "periph/cpuid.h"
 
 int main(void)

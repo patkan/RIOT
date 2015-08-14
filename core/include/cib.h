@@ -10,7 +10,7 @@
  * @addtogroup  core_util
  * @{
  *
- * @file        cib.h
+ * @file
  * @brief       Circular integer buffer interface
  * @details     This structure provides an organizational interface
  *              and combined with an memory array forms a circular buffer.
@@ -18,8 +18,8 @@
  * @author      unknown, propably Kaspar Schleiser <kaspar@schleiser.de>
  */
 
-#ifndef __CIB_H
-#define __CIB_H
+#ifndef CIB_H
+#define CIB_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -105,5 +105,5 @@ static inline int cib_put(cib_t *__restrict cib)
 }
 #endif
 
-#endif /* __CIB_H */
+#endif /* CIB_H */
 /** @} */

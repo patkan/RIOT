@@ -21,6 +21,13 @@
 #endif
 
 /**
+ * @name hardware timer clock skew avoidance
+ * @{
+ */
+#define NATIVE_TIMER_MIN_RES 200
+/** @} */
+
+/**
  * @name Random Number Generator configuration
  * @{
  */
@@ -32,6 +39,17 @@
  * @{
  */
 #define RTC_NUMOF (1)
+/** @} */
+
+/**
+ * @name Timer peripheral configuration
+ * @{
+ */
+#define TIMER_NUMOF        (1U)
+#define TIMER_0_EN         1
+
+/** @def set TIMER0 for hwtimer wrapper */
+#define HW_TIMER TIMER_0
 /** @} */
 
 #ifdef __cplusplus

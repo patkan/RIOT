@@ -24,7 +24,7 @@
 #include <stddef.h>
 #include <string.h>
 
-#include "cpu-conf.h"
+#include "cpu_conf.h"
 #include "irq.h"
 #include "kernel_internal.h"
 #include "msg.h"
@@ -38,11 +38,11 @@
 #define ENABLE_DEBUG (0)
 
 #if ENABLE_DEBUG
-#   define PTHREAD_REAPER_STACKSIZE KERNEL_CONF_STACKSIZE_MAIN
-#   define PTHREAD_STACKSIZE KERNEL_CONF_STACKSIZE_MAIN
+#   define PTHREAD_REAPER_STACKSIZE THREAD_STACKSIZE_MAIN
+#   define PTHREAD_STACKSIZE THREAD_STACKSIZE_MAIN
 #else
-#   define PTHREAD_REAPER_STACKSIZE KERNEL_CONF_STACKSIZE_DEFAULT
-#   define PTHREAD_STACKSIZE KERNEL_CONF_STACKSIZE_DEFAULT
+#   define PTHREAD_REAPER_STACKSIZE THREAD_STACKSIZE_DEFAULT
+#   define PTHREAD_STACKSIZE THREAD_STACKSIZE_DEFAULT
 #endif
 
 #include "debug.h"
@@ -66,6 +66,8 @@ typedef struct pthread_thread {
 
     char *stack;
 
+    struct __pthread_tls_datum *tls_head;
+
     __pthread_cleanup_datum_t *cleanup_top;
 } pthread_thread_t;
 
@@ -87,6 +89,7 @@ static int insert(pthread_thread_t *pt)
 {
     int result = -1;
     mutex_lock(&pthread_mutex);
+
     for (int i = 0; i < MAXTHREADS; i++){
         if (!pthread_sched_threads[i]) {
             pthread_sched_threads[i] = pt;
@@ -94,6 +97,7 @@ static int insert(pthread_thread_t *pt)
             break;
         }
     }
+
     mutex_unlock(&pthread_mutex);
     return result;
 }
@@ -150,7 +154,7 @@ int pthread_create(pthread_t *newthread, const pthread_attr_t *attr, void *(*sta
 
     pt->thread_pid = thread_create(stack,
                                    stack_size,
-                                   PRIORITY_MAIN,
+                                   THREAD_PRIORITY_MAIN,
                                    CREATE_WOUT_YIELD | CREATE_STACKTEST,
                                    pthread_start_routine,
                                    pt,
@@ -162,7 +166,7 @@ int pthread_create(pthread_t *newthread, const pthread_attr_t *attr, void *(*sta
         return -1;
     }
 
-    sched_switch(PRIORITY_MAIN);
+    sched_switch(THREAD_PRIORITY_MAIN);
 
     return 0;
 }
@@ -175,13 +179,19 @@ void pthread_exit(void *retval)
         DEBUG("ERROR called pthread_self() returned 0 in \"%s\"!\n", __func__);
     }
     else {
-        pthread_thread_t *self = pthread_sched_threads[self_id-1];
+        pthread_thread_t *self = pthread_sched_threads[self_id - 1];
 
         while (self->cleanup_top) {
             __pthread_cleanup_datum_t *ct = self->cleanup_top;
             self->cleanup_top = ct->__next;
 
             ct->__routine(ct->__arg);
+        }
+
+        /* Prevent linking in pthread_tls.o if no TSS functions were used. */
+        extern void __pthread_keys_exit(int self_id) __attribute__((weak));
+        if (__pthread_keys_exit) {
+            __pthread_keys_exit(self_id);
         }
 
         self->thread_pid = KERNEL_PID_UNDEF;
@@ -352,4 +362,10 @@ void __pthread_cleanup_pop(__pthread_cleanup_datum_t *datum, int execute)
          *  invoke it (if execute is non-zero)." */
         datum->__routine(datum->__arg);
     }
+}
+
+struct __pthread_tls_datum **__pthread_get_tls_head(int self_id)
+{
+    pthread_thread_t *self = pthread_sched_threads[self_id-1];
+    return self ? &self->tls_head : NULL;
 }

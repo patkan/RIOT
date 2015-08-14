@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_arduino-due Arduino Due
+ * @defgroup    boards_arduino-due Arduino Due
  * @ingroup     boards
  * @brief       Support for the Arduino Due board.
  * @{
@@ -18,8 +18,8 @@
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "cpu.h"
 
@@ -80,5 +80,5 @@ void board_init(void);
 }
 #endif
 
-#endif /** __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

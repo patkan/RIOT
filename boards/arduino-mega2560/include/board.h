@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_arduino-mega2560 Arduino Mega 2560
+ * @defgroup    boards_arduino-mega2560 Arduino Mega 2560
  * @ingroup     boards
  * @brief       Board specific files for the Arduino Mega 2560 board.
  * @{
@@ -18,8 +18,8 @@
  * @author      Hinnerk van Bruinehsen <h.v.bruinehsen@fu-berlin.de>
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "cpu.h"
 
@@ -83,5 +83,5 @@ void board_init(void);
 }
 #endif
 
-#endif /** __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */
