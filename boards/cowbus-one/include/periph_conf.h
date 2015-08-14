@@ -99,6 +99,11 @@ extern "C" {
 #define UART_1_AF           1
 /** @} */
 
+/* EEPROM device configuration */
+#define EEPROM_SPI_DEV      SPI_0
+#define EEPROM_CS_GPIO      GPIO_4
+#define EEPROM_HOLD_GPIO    GPIO_5
+
 /**
  * @name ADC configuration
  * @{

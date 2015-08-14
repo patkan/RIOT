@@ -1,5 +1,7 @@
 /*
+ * Copyright (C) 2014 Hamburg University of Applied Sciences
  * Copyright (C) 2014 Freie Universität Berlin
+ * Copyright (C) 2015 Kaspar Schleiser <kaspar@schleiser.de>
  *
  * This file is subject to the terms and conditions of the GNU Lesser General
  * Public License v2.1. See the file LICENSE in the top level directory for more
@@ -11,26 +13,53 @@
  * @{
  *
  * @file
- * @brief       Low-level GPIO driver implementation
+ * @brief       Low-level SPI driver implementation
  *
  * @author      Peter Kietzmann <peter.kietzmann@haw-hamburg.de>
- * @author      Hauke Petersen <mail@haukepetersen.de>
  * @author      Fabian Nack <nack@inf.fu-berlin.de>
+ * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  * @author      Joakim Gebart <joakim.gebart@eistec.se>
+ * @author      Kaspar Schleiser <kaspar@schleiser.de>
  *
  * @}
  */
+#include <stdio.h>
 
-#include "cpu.h"
 #include "board.h"
+#include "cpu.h"
 #include "mutex.h"
 #include "periph/spi.h"
 #include "periph_conf.h"
 #include "thread.h"
 #include "sched.h"
+#include "vtimer.h"
 
-/* guard file in case no SPI device is defined */
+#define ENABLE_DEBUG (0)
+#include "debug.h"
+
+/* guard this file in case no SPI device is defined */
 #if SPI_NUMOF
+
+typedef struct {
+    char(*cb)(char data);
+} spi_state_t;
+
+/* static device mapping */
+static SPI_TypeDef *const spi[] = {
+#if SPI_0_EN
+    SPI_0_DEV,
+#endif
+#if SPI_1_EN
+    SPI_1_DEV,
+#endif
+#if SPI_2_EN
+    SPI_2_DEV
+#endif
+};
+
+static inline void irq_handler_transfer(SPI_TypeDef *spi, spi_t dev);
+
+static spi_state_t spi_config[SPI_NUMOF];
 
 /**
  * @brief Array holding one pre-initialized mutex for each SPI device
@@ -49,112 +78,212 @@ static mutex_t locks[] =  {
 
 int spi_init_master(spi_t dev, spi_conf_t conf, spi_speed_t speed)
 {
-    SPI_TypeDef *spi;
+    uint8_t speed_divider;
 
-    /* power on the SPI device */
-    spi_poweron(dev);
+    switch (speed) {
+        case SPI_SPEED_100KHZ:
+            return -2;          /* not possible for stm32f3 */
+            break;
+        case SPI_SPEED_400KHZ:
+            speed_divider = 7;  /* makes 656 kHz */
+            break;
+        case SPI_SPEED_1MHZ:
+            speed_divider = 6;  /* makes 1.3 MHz */
+            break;
+        case SPI_SPEED_5MHZ:
+            speed_divider = 4;  /* makes 5.3 MHz */
+            break;
+        case SPI_SPEED_10MHZ:
+            speed_divider = 3;  /* makes 10.5 MHz */
+            break;
+        default:
+            return -1;
+    }
 
     switch (dev) {
 #if SPI_0_EN
         case SPI_0:
-            spi = SPI_0_DEV;
-            SPI_0_PORT_CLKEN();
+            /* enable clocks */
+            SPI_0_CLKEN();
+            SPI_0_SCK_PORT_CLKEN();
+            SPI_0_MISO_PORT_CLKEN();
+            SPI_0_MOSI_PORT_CLKEN();
             break;
-#endif
+#endif /* SPI_0_EN */
 #if SPI_1_EN
         case SPI_1:
-            spi = SPI_1_DEV;
-            SPI_1_PORT_CLKEN();
+            /* enable clocks */
+            SPI_1_CLKEN();
+            SPI_1_SCK_PORT_CLKEN();
+            SPI_1_MISO_PORT_CLKEN();
+            SPI_1_MOSI_PORT_CLKEN();
             break;
-#endif
+#endif /* SPI_1_EN */
+#if SPI_2_EN
+        case SPI_2:
+            /* enable clocks */
+            SPI_2_CLKEN();
+            SPI_2_SCK_PORT_CLKEN();
+            SPI_2_MISO_PORT_CLKEN();
+            SPI_2_MOSI_PORT_CLKEN();
+            break;
+#endif /* SPI_2_EN */
         default:
-            return -1;
+            return -2;
     }
 
     /* configure SCK, MISO and MOSI pin */
     spi_conf_pins(dev);
 
-    /* reset SPI configuration registers */
-    spi->CR1 = 0;
-    spi->CR2 = 0;
-    spi->I2SCFGR = 0;       /* this makes sure SPI mode is selected */
-
-    /* configure bus clock speed */
-    switch (speed) {
-        case SPI_SPEED_100KHZ:
-            spi->CR1 |= (7 << 3);       /* actual clock: 187.5KHz (lowest possible) */
-            break;
-        case SPI_SPEED_400KHZ:
-            spi->CR1 |= (6 << 3);       /* actual clock: 375KHz */
-            break;
-        case SPI_SPEED_1MHZ:
-            spi->CR1 |= (4 << 3);       /* actual clock: 1.5MHz */
-            break;
-        case SPI_SPEED_5MHZ:
-            spi->CR1 |= (2 << 3);       /* actual clock: 6MHz */
-            break;
-        case SPI_SPEED_10MHZ:
-            spi->CR1 |= (1 << 3);       /* actual clock 12MHz */
-    }
-
-    /* select clock polarity and clock phase */
-    spi->CR1 |= conf;
-    /* select master mode */
-    spi->CR1 |= SPI_CR1_MSTR;
+    /**************** SPI-Init *****************/
+#ifdef CPU_MODEL_STM32F303VC
+    spi[dev]->I2SCFGR &= ~(SPI_I2SCFGR_I2SMOD);/* Activate the SPI mode (Reset I2SMOD bit in I2SCFGR register) */
+#endif
+    spi[dev]->CR1 = 0;
+    spi[dev]->CR2 = 0;
     /* the NSS (chip select) is managed purely by software */
-    spi->CR1 |= SPI_CR1_SSM | SPI_CR1_SSI;
-    /* set data-size to 8-bit */
-    spi->CR2 |= (0x7 << 8);
-    /* set FIFO threshold to set RXNE when 8 bit are received */
-    spi->CR2 |= SPI_CR2_FRXTH;
-    /* enable the SPI device */
-    spi->CR1 |= SPI_CR1_SPE;
+    spi[dev]->CR1 |= SPI_CR1_SSM | SPI_CR1_SSI;
+    spi[dev]->CR1 |= (speed_divider << 3);  /* Define serial clock baud rate. 001 leads to f_PCLK/4 */
+    spi[dev]->CR1 |= (SPI_CR1_MSTR);  /* 1: master configuration */
+    spi[dev]->CR1 |= (conf);
+
+    spi[dev]->CR2 |= SPI_CR2_FRXTH; /* set FIFO reception threshold to 8bit (default: 16bit) */
+
+    /* enable SPI */
+    spi[dev]->CR1 |= (SPI_CR1_SPE);
+
     return 0;
 }
 
-int spi_init_slave(spi_t dev, spi_conf_t conf, char (*cb)(char data))
+int spi_init_slave(spi_t dev, spi_conf_t conf, char(*cb)(char data))
 {
-    /* due to issues with the send buffer, the master mode is not (yet) supported */
-    return -1;
+    switch (dev) {
+#if SPI_0_EN
+        case SPI_0:
+            /* enable clocks */
+            SPI_0_CLKEN();
+            SPI_0_SCK_PORT_CLKEN();
+            SPI_0_MISO_PORT_CLKEN();
+            SPI_0_MOSI_PORT_CLKEN();
+            /* configure interrupt channel */
+            NVIC_SetPriority(SPI_0_IRQ, SPI_IRQ_PRIO); /* set SPI interrupt priority */
+            NVIC_EnableIRQ(SPI_0_IRQ); /* set SPI interrupt priority */
+            break;
+#endif /* SPI_0_EN */
+#if SPI_1_EN
+        case SPI_1:
+            /* enable clocks */
+            SPI_1_CLKEN();
+            SPI_1_SCK_PORT_CLKEN();
+            SPI_1_MISO_PORT_CLKEN();
+            SPI_1_MOSI_PORT_CLKEN();
+            /* configure interrupt channel */
+            NVIC_SetPriority(SPI_1_IRQ, SPI_IRQ_PRIO);
+            NVIC_EnableIRQ(SPI_1_IRQ);
+            break;
+#endif /* SPI_1_EN */
+#if SPI_2_EN
+        case SPI_2:
+            /* enable clocks */
+            SPI_2_CLKEN();
+            SPI_2_SCK_PORT_CLKEN();
+            SPI_2_MISO_PORT_CLKEN();
+            SPI_2_MOSI_PORT_CLKEN();
+            /* configure interrupt channel */
+            NVIC_SetPriority(SPI_2_IRQ, SPI_IRQ_PRIO);
+            NVIC_EnableIRQ(SPI_2_IRQ);
+            break;
+#endif /* SPI_2_EN */
+        default:
+            return -1;
+    }
+
+    /* configure sck, miso and mosi pin */
+    spi_conf_pins(dev);
+
+    /***************** SPI-Init *****************/
+#ifdef CPU_MODEL_STM32F303VC
+    spi[dev]->I2SCFGR &= ~(SPI_I2SCFGR_I2SMOD);
+#endif
+    spi[dev]->CR1 = 0;
+    spi[dev]->CR2 = 0;
+    /* enable RXNEIE flag to enable rx buffer not empty interrupt */
+    spi[dev]->CR2 |= (SPI_CR2_RXNEIE); /*1:not masked */
+    spi[dev]->CR1 |= (conf);
+     /* the NSS (chip select) is managed by software and NSS is low (slave enabled) */
+    spi[dev]->CR1 |= SPI_CR1_SSM;
+    /* set callback */
+    spi_config[dev].cb = cb;
+    /* enable SPI device */
+    spi[dev]->CR1 |= SPI_CR1_SPE;
+    return 0;
 }
 
 int spi_conf_pins(spi_t dev)
 {
-    GPIO_TypeDef *port;
-    int pin[3];        /* 3 pins: sck, miso, mosi */
-    int af = 0;
+    GPIO_TypeDef *port[3];
+    int pin[3], af[3];
 
     switch (dev) {
 #if SPI_0_EN
         case SPI_0:
-            port = SPI_0_PORT;
-            pin[0] = SPI_0_PIN_SCK;
-            pin[1] = SPI_0_PIN_MISO;
-            pin[2] = SPI_0_PIN_MOSI;
-            af = SPI_0_PIN_AF;
+            port[0] = SPI_0_SCK_PORT;
+            pin[0] = SPI_0_SCK_PIN;
+            af[0] = SPI_0_SCK_AF;
+            port[1] = SPI_0_MOSI_PORT;
+            pin[1] = SPI_0_MOSI_PIN;
+            af[1] = SPI_0_MOSI_AF;
+            port[2] = SPI_0_MISO_PORT;
+            pin[2] = SPI_0_MISO_PIN;
+            af[2] = SPI_0_MISO_AF;
             break;
-#endif
+#endif /* SPI_0_EN */
 #if SPI_1_EN
         case SPI_1:
-            port = SPI_1_PORT;
-            pin[0] = SPI_1_PIN_SCK;
-            pin[1] = SPI_1_PIN_MISO;
-            pin[2] = SPI_1_PIN_MOSI;
-            af = SPI_1_PIN_AF;
+            port[0] = SPI_1_SCK_PORT;
+            pin[0] = SPI_1_SCK_PIN;
+            af[0] = SPI_1_SCK_AF;
+            port[1] = SPI_1_MOSI_PORT;
+            pin[1] = SPI_1_MOSI_PIN;
+            af[1] = SPI_1_MOSI_AF;
+            port[2] = SPI_1_MISO_PORT;
+            pin[2] = SPI_1_MISO_PIN;
+            af[2] = SPI_1_MISO_AF;
             break;
-#endif
+#endif /* SPI_1_EN */
+#if SPI_2_EN
+        case SPI_2:
+            port[0] = SPI_2_SCK_PORT;
+            pin[0] = SPI_2_SCK_PIN;
+            af[0] = SPI_2_SCK_AF;
+            port[1] = SPI_2_MOSI_PORT;
+            pin[1] = SPI_2_MOSI_PIN;
+            af[1] = SPI_2_MOSI_AF;
+            port[2] = SPI_2_MISO_PORT;
+            pin[2] = SPI_2_MISO_PIN;
+            af[2] = SPI_2_MISO_AF;
+            break;
+#endif /* SPI_2_EN */
         default:
-			
             return -1;
     }
 
-    /* configure pins for their correct alternate function */
     for (int i = 0; i < 3; i++) {
-        port->MODER &= ~(3 << (pin[i] * 2));
-        port->MODER |= (2 << (pin[i] * 2));
+        /* Set GPIOs to AF mode */
+        port[i]->MODER &= ~(3 << (2 * pin[i]));
+        port[i]->MODER |= (2 << (2 * pin[i]));
+        /* Set speed */
+        port[i]->OSPEEDR &= ~(3 << (2 * pin[i]));
+        port[i]->OSPEEDR |= (3 << (2 * pin[i]));
+        /* Set to push-pull configuration */
+        port[i]->OTYPER &= ~(1 << pin[i]);
+        /* Configure push-pull resistors */
+        port[i]->PUPDR &= ~(3 << (2 * pin[i]));
+        port[i]->PUPDR |= (2 << (2 * pin[i]));
+        /* Configure GPIOs for the SPI alternate function */
         int hl = (pin[i] < 8) ? 0 : 1;
-        port->AFR[hl] &= ~(0xf << ((pin[i] - (hl * 8)) * 4));
-        port->AFR[hl] |= (af << ((pin[i] - (hl * 8)) * 4));
+        port[i]->AFR[hl] &= ~(0xf << ((pin[i] - (hl * 8)) * 4));
+        port[i]->AFR[hl] |= (af[i] << ((pin[i] - (hl * 8)) * 4));
     }
 
     return 0;
@@ -180,33 +309,23 @@ int spi_release(spi_t dev)
 
 int spi_transfer_byte(spi_t dev, char out, char *in)
 {
-	LD4_ON;
     char tmp;
-    SPI_TypeDef *spi = 0;
 
-    switch (dev) {
-#if SPI_0_EN
-        case SPI_0:
-            spi = SPI_0_DEV;
-            break;
-#endif
-#if SPI_1_EN
-        case SPI_1:
-            spi = SPI_1_DEV;
-            break;
-#endif
-        default:
-            return 0;
-    }
+    /* recast to uint_8 to force 8bit access */
+    volatile uint8_t *DR = (volatile uint8_t*) &spi[dev]->DR;
 
     /* wait for an eventually previous byte to be readily transferred */
-    while(!(spi->SR & SPI_SR_TXE));
+    while(!(spi[dev]->SR & SPI_SR_TXE));
+
     /* put next byte into the output register */
-    *((volatile uint8_t *)(&spi->DR)) = (uint8_t)out;
+    *DR = out;
+
     /* wait until the current byte was successfully transferred */
-    while(!(spi->SR & SPI_SR_RXNE) );
+    while(!(spi[dev]->SR & SPI_SR_RXNE) );
+
     /* read response byte to reset flags */
-    tmp = *((volatile uint8_t *)(&spi->DR));
+    tmp = *DR;
+
     /* 'return' response byte if wished for */
     if (in) {
         *in = tmp;
@@ -217,39 +336,65 @@ int spi_transfer_byte(spi_t dev, char out, char *in)
 
 int spi_transfer_bytes(spi_t dev, char *out, char *in, unsigned int length)
 {
-    char res;
-    int count = 0;
+    int i, trans_ret, trans_bytes = 0;
+    char in_temp;
 
-    for (int i = 0; i < length; i++) {
-        if (out) {
-            count += spi_transfer_byte(dev, out[i], &res);
+    for (i = 0; i < length; i++) {
+        if (out != NULL) {
+            trans_ret = spi_transfer_byte(dev, out[i], &in_temp);
         }
         else {
-            count += spi_transfer_byte(dev, 0, &res);
+            trans_ret = spi_transfer_byte(dev, 0, &in_temp);
         }
-        if (in) {
-            in[i] = res;
+        if (trans_ret < 0) {
+            return -1;
         }
+        if (in != NULL) {
+            in[i] = in_temp;
+        }
+        trans_bytes++;
     }
 
-    return count;
+    return trans_bytes++;
 }
 
 int spi_transfer_reg(spi_t dev, uint8_t reg, char out, char *in)
 {
-    spi_transfer_byte(dev, reg, 0);
-    return spi_transfer_byte(dev, out, in);
+    int trans_ret;
+
+    trans_ret = spi_transfer_byte(dev, reg, in);
+    if (trans_ret < 0) {
+        return -1;
+    }
+    trans_ret = spi_transfer_byte(dev, out, in);
+    if (trans_ret < 0) {
+        return -1;
+    }
+
+    return 1;
 }
 
 int spi_transfer_regs(spi_t dev, uint8_t reg, char *out, char *in, unsigned int length)
 {
-    spi_transfer_byte(dev, reg, 0);
-    return spi_transfer_bytes(dev, out, in, length);
+    int trans_ret;
+
+    trans_ret = spi_transfer_byte(dev, reg, in);
+    if (trans_ret < 0) {
+        return -1;
+    }
+    trans_ret = spi_transfer_bytes(dev, out, in, length);
+    if (trans_ret < 0) {
+        return -1;
+    }
+
+    return trans_ret;
 }
 
 void spi_transmission_begin(spi_t dev, char reset_val)
 {
-    /* slave mode is not (yet) supported */
+    if (dev < SPI_NUMOF) {
+        spi[dev]->DR = reset_val;
+    }
 }
 
 void spi_poweron(spi_t dev)
@@ -263,6 +408,11 @@ void spi_poweron(spi_t dev)
 #if SPI_1_EN
         case SPI_1:
             SPI_1_CLKEN();
+            break;
+#endif
+#if SPI_2_EN
+        case SPI_2:
+            SPI_2_CLKEN();
             break;
 #endif
     }
@@ -283,7 +433,49 @@ void spi_poweroff(spi_t dev)
             SPI_1_CLKDIS();
             break;
 #endif
+#if SPI_2_EN
+        case SPI_2:
+            while (SPI_2_DEV->SR & SPI_SR_BSY);
+            SPI_2_CLKDIS();
+            break;
+#endif
     }
 }
+
+static inline void irq_handler_transfer(SPI_TypeDef *spi, spi_t dev)
+{
+
+    if (spi->SR & SPI_SR_RXNE) {
+        char data;
+        data = spi->DR;
+        data = spi_config[dev].cb(data);
+        spi->DR = data;
+    }
+    /* see if a thread with higher priority wants to run now */
+    if (sched_context_switch_request) {
+        thread_yield();
+    }
+}
+
+#if SPI_0_EN
+void SPI_0_IRQ_HANDLER(void)
+{
+    irq_handler_transfer(SPI_0_DEV, SPI_0);
+}
+#endif
+
+#if SPI_1_EN
+void SPI_1_IRQ_HANDLER(void)
+{
+    irq_handler_transfer(SPI_1_DEV, SPI_1);
+}
+#endif
+
+#if SPI_2_EN
+void SPI_2_IRQ_HANDLER(void)
+{
+    irq_handler_transfer(SPI_2_DEV, SPI_2);
+}
+#endif
 
 #endif /* SPI_NUMOF */

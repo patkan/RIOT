@@ -64,102 +64,12 @@ static inline int _port_num(gpio_t pin)
     return ((pin >> 10) & 0x0f);
 }
 
-    switch (dev) {
-#if GPIO_0_EN
-        case GPIO_0:
-            GPIO_0_CLKEN();
-            port = GPIO_0_PORT;
-            pin = GPIO_0_PIN;
-            break;
-#endif
-#if GPIO_1_EN
-        case GPIO_1:
-            GPIO_1_CLKEN();
-            port = GPIO_1_PORT;
-            pin = GPIO_1_PIN;
-            break;
-#endif
-#if GPIO_2_EN
-        case GPIO_2:
-            GPIO_2_CLKEN();
-            port = GPIO_2_PORT;
-            pin = GPIO_2_PIN;
-            break;
-#endif
-#if GPIO_3_EN
-        case GPIO_3:
-            GPIO_3_CLKEN();
-            port = GPIO_3_PORT;
-            pin = GPIO_3_PIN;
-            break;
-#endif
-#if GPIO_4_EN
-        case GPIO_4:
-            GPIO_4_CLKEN();
-            port = GPIO_4_PORT;
-            pin = GPIO_4_PIN;
-            break;
-#endif
-#if GPIO_5_EN
-        case GPIO_5:
-            GPIO_5_CLKEN();
-            port = GPIO_5_PORT;
-            pin = GPIO_5_PIN;
-            break;
-#endif
-#if GPIO_6_EN
-        case GPIO_6:
-            GPIO_6_CLKEN();
-            port = GPIO_6_PORT;
-            pin = GPIO_6_PIN;
-            break;
-#endif
-#if GPIO_7_EN
-        case GPIO_7:
-            GPIO_7_CLKEN();
-            port = GPIO_7_PORT;
-            pin = GPIO_7_PIN;
-            break;
-#endif
-#if GPIO_8_EN
-        case GPIO_8:
-            GPIO_8_CLKEN();
-            port = GPIO_8_PORT;
-            pin = GPIO_8_PIN;
-            break;
-#endif
-#if GPIO_9_EN
-        case GPIO_9:
-            GPIO_9_CLKEN();
-            port = GPIO_9_PORT;
-            pin = GPIO_9_PIN;
-            break;
-#endif
-#if GPIO_10_EN
-        case GPIO_10:
-            GPIO_10_CLKEN();
-            port = GPIO_10_PORT;
-            pin = GPIO_10_PIN;
-            break;
-#endif
-#if GPIO_11_EN
-        case GPIO_11:
-            GPIO_11_CLKEN();
-            port = GPIO_11_PORT;
-            pin = GPIO_11_PIN;
-            break;
-#endif
-    }
-
-    port->MODER &= ~(2 << (2 * pin));           /* set pin to output mode */
-    port->MODER |= (1 << (2 * pin));
-    port->OTYPER &= ~(1 << pin);                /* set to push-pull configuration */
-    port->OSPEEDR |= (3 << (2 * pin));          /* set to high speed */
-    port->PUPDR &= ~(3 << (2 * pin));           /* configure push-pull resistors */
-    port->PUPDR |= (pushpull << (2 * pin));
-    port->ODR &= ~(1 << pin);                   /* set pin to low signal */
-
-    return 0; /* all OK */
+/**
+ * @brief   Extract the pin number from the last 4 bit of the pin identifier
+ */
+static inline int _pin_num(gpio_t pin)
+{
+    return (pin & 0x0f);
 }
 
 int gpio_init(gpio_t pin, gpio_dir_t dir, gpio_pp_t pushpull)
@@ -311,3 +221,4 @@ void isr_exti(void)
         thread_yield();
     }
 }
+

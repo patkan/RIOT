@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_stm32f3discovery-diy STM32F3Discovery-diy
+ * @defgroup    boards_stm32f3discovery STM32F3Discovery
  * @ingroup     boards
  * @brief       Board specific files for the STM32F3Discovery board
  * @{
@@ -18,8 +18,8 @@
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "cpu.h"
 
@@ -114,5 +114,5 @@ void board_init(void);
 }
 #endif
 
-#endif /** __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

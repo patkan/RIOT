@@ -21,14 +21,11 @@
 #include "board.h"
 
 static void leds_init(void);
-static void radio_init(void);
 
 void board_init(void)
 {
     /* initialize the boards LEDs */
     leds_init();
-
-    //radio_init();
 
     /* initialize the CPU */
     cpu_init();
@@ -67,28 +64,4 @@ static void leds_init(void)
 
     /* turn all LEDs off */
     LED_PORT->BRR = 0xff00;
-}
-
-
-
-// TODO
-// (for what lines means what, see leds_init...)
-static void radio_init(void)
-{
-    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-    RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
-
-    GPIOB->OSPEEDR |= 0xffffffff;
-    GPIOB->OTYPER &= ~(0x0000ffff);
-    GPIOB->MODER &= ~(0xffffffff);
-    GPIOB->MODER |= 0x55555555;
-    GPIOB->PUPDR &= ~(0xffffffff);
-    GPIOB->BRR = 0xff00;
-    
-    GPIOA->OSPEEDR |= 0xffffffff;
-    GPIOA->OTYPER &= ~(0x0000ffff);
-    GPIOA->OTYPER |= 0b11110000;
-    GPIOA->MODER = 0b1010101001010101;
-
-
 }
