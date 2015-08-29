@@ -7,7 +7,7 @@
  */
 
 /**
- * @ingroup     board_stm32f0discovery
+ * @ingroup     boards_stm32f0discovery
  * @{
  *
  * @file
@@ -45,8 +45,8 @@ void board_init(void)
  */
 void leds_init(void)
 {
-    /* enable clock for port GPIOA */
-    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+    /* enable clock for port GPIOC */
+    RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
 
     /* set output speed to 50MHz */
     LED_PORT->OSPEEDR |= 0x000f0000;

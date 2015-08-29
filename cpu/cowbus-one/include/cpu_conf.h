@@ -24,36 +24,30 @@
 #ifdef CPU_MODEL_STM32F051R8
 #include "stm32f051x8.h"
 #endif
-
-
-/**
- * @name Kernel configuration
- *
- * The absolute minimum stack size is 140 byte (68 byte for the tcb + 72 byte
- * for a complete context save).
- *
- * TODO: measure and adjust for the Cortex-M0
- * @{
- */
-#define KERNEL_CONF_STACKSIZE_PRINTF    (512)
-
-#ifndef KERNEL_CONF_STACKSIZE_DEFAULT
-#define KERNEL_CONF_STACKSIZE_DEFAULT   (512)
+#ifdef CPU_MODEL_STM32F091RC
+#include "stm32f091xc.h"
 #endif
 
-#define KERNEL_CONF_STACKSIZE_IDLE      (192)
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * @brief   ARM Cortex-M specific CPU configuration
+ * @{
+ */
+#define CPU_DEFAULT_IRQ_PRIO            (1U)
+#define CPU_IRQ_NUMOF                   (31U)
 /** @} */
 
 /**
- * @name UART0 buffer size definition for compatibility reasons
- *
- * TODO: remove once the remodeling of the uart0 driver is done
- * @{
+ * @brief Length for reading CPU_ID
  */
-#ifndef UART0_BUFSIZE
-#define UART0_BUFSIZE                   (128)
+#define CPUID_ID_LEN                    (12)
+
+#ifdef __cplusplus
+}
 #endif
-/** @} */
 
 #endif /* __CPU_CONF_H */
 /** @} */

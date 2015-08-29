@@ -45,6 +45,13 @@ extern "C" {
 #define CPU_FLASH_BASE                  FLASH_BASE
 /** @} */
 
+#define THREAD_EXTRA_STACKSIZE_PRINTF_FLOAT  (4096)
+#define THREAD_EXTRA_STACKSIZE_PRINTF        (2048)
+
+//#ifndef THREAD_STACKSIZE_DEFAULT
+//#define THREAD_STACKSIZE_DEFAULT   (512)
+//#endif
+
 /**
  * @brief Length for reading CPU_ID
  */
