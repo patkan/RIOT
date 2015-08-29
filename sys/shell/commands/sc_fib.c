@@ -24,10 +24,12 @@
 #include <stdlib.h>
 #include "thread.h"
 #include "inet_pton.h"
-#ifdef MODULE_NG_NETIF
-#include "net/ng_netif.h"
+#include "net/af.h"
+#ifdef MODULE_GNRC_NETIF
+#include "net/gnrc/netif.h"
 #endif
 #include "net/fib.h"
+#include "net/gnrc/ipv6.h"
 
 #define INFO1_TXT "fibroute add <destination> via <next hop> [dev <device>]"
 #define INFO2_TXT " [lifetime <lifetime>]"
@@ -103,14 +105,14 @@ static void _fib_add(const char *dest, const char *next, kernel_pid_t pid, uint3
         nxt_flags = AF_INET;
     }
 
-    fib_add_entry(pid, dst, dst_size, dst_flags, nxt, nxt_size, nxt_flags, lifetime);
+    fib_add_entry(gnrc_ipv6_fib_table, pid, dst, dst_size, dst_flags, nxt, nxt_size, nxt_flags, lifetime);
 }
 
 int _fib_route_handler(int argc, char **argv)
 {
     /* e.g. fibroute right now dont care about the adress/protocol family */
     if (argc == 1) {
-        fib_print_routes();
+        fib_print_routes(gnrc_ipv6_fib_table);
         return 0;
     }
 
@@ -137,23 +139,23 @@ int _fib_route_handler(int argc, char **argv)
     /* e.g. fibroute del <destination> */
     if (argc == 3) {
         if (inet_pton(AF_INET6, argv[2], tmp_ipv6_dst)) {
-            fib_remove_entry(tmp_ipv6_dst, IN6ADDRSZ);
+            fib_remove_entry(gnrc_ipv6_fib_table, tmp_ipv6_dst, IN6ADDRSZ);
         }
         else if (inet_pton(AF_INET, argv[2], tmp_ipv4_dst)) {
-            fib_remove_entry(tmp_ipv4_dst, INADDRSZ);
+            fib_remove_entry(gnrc_ipv6_fib_table, tmp_ipv4_dst, INADDRSZ);
         }
         else {
-            fib_remove_entry((uint8_t *)argv[2], (strlen(argv[2])));
+            fib_remove_entry(gnrc_ipv6_fib_table, (uint8_t *)argv[2], (strlen(argv[2])));
         }
 
         return 0;
     }
 
-#ifdef MODULE_NG_NETIF
+#ifdef MODULE_GNRC_NETIF
     /* e.g. fibroute add <destination> via <next hop> */
     if ((argc == 5) && (strcmp("add", argv[1]) == 0) && (strcmp("via", argv[3]) == 0)) {
-        kernel_pid_t ifs[NG_NETIF_NUMOF];
-        size_t ifnum = ng_netif_get(ifs);
+        kernel_pid_t ifs[GNRC_NETIF_NUMOF];
+        size_t ifnum = gnrc_netif_get(ifs);
         if (ifnum == 1) {
             _fib_add(argv[2], argv[4], ifs[0], FIB_LIFETIME_NO_EXPIRE);
         }
@@ -168,8 +170,8 @@ int _fib_route_handler(int argc, char **argv)
     /* e.g. fibroute add <destination> via <next hop> lifetime <lifetime> */
     if ((argc == 7) && (strcmp("add", argv[1]) == 0) && (strcmp("via", argv[3]) == 0)
             && (strcmp("lifetime", argv[5]) == 0)) {
-        kernel_pid_t ifs[NG_NETIF_NUMOF];
-        size_t ifnum = ng_netif_get(ifs);
+        kernel_pid_t ifs[GNRC_NETIF_NUMOF];
+        size_t ifnum = gnrc_netif_get(ifs);
         if (ifnum == 1) {
             _fib_add(argv[2], argv[4], ifs[0], (uint32_t)atoi(argv[6]));
         }

@@ -11,7 +11,7 @@ ifneq (,$(filter samr21-xpro,$(BOARD)))
   DRIVER ?= at86rf233
   USE_BOARD_PARAMETERS:=true
 endif
-ifneq (,$(filter iot-lab_M3,$(BOARD)))
+ifneq (,$(filter iotlab-m3,$(BOARD)))
   DRIVER ?= at86rf231
   USE_BOARD_PARAMETERS:=true
 endif
@@ -61,10 +61,10 @@ endif
 
 endif # USE_BOARD_PARAMETERS=false
 
-USEMODULE += auto_init_ng_netif
-USEMODULE += ng_netif
-USEMODULE += ng_nomac
-USEMODULE += ng_pktdump
+USEMODULE += auto_init_gnrc_netif
+USEMODULE += gnrc_netif
+USEMODULE += gnrc_nomac
+USEMODULE += gnrc_pktdump
 USEMODULE += uart0
 USEMODULE += shell
 USEMODULE += shell_commands

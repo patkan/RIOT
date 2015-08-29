@@ -8,7 +8,7 @@ nodes. It is primarily designed for sniffing wireless data traffic, but can also
 well be used for wired network traffic, as long as the used network devices
 support promiscuous mode and output of raw data.
 
-The sniffer is based on a RIOT node running the [sniffer application](https://github.com/RIOT-OS/applications/tree/master/ng_sniffer) application located in [RIOTs application repository](https://github.com/RIOT-OS/applications).
+The sniffer is based on a RIOT node running the [sniffer application](https://github.com/RIOT-OS/applications/tree/master/sniffer) application located in [RIOTs application repository](https://github.com/RIOT-OS/applications).
 This node outputs received network traffic via a serial port in the Wireshark
 pcap format. This output is then parsed by the `sniffer.py` script included
 in this folder run on a host computer.
@@ -62,7 +62,7 @@ The script has the following parameters:
 ### Examples
 
 The following examples are made when using the sniffer application together with
-an `iot-lab_M3` node that is connected to /dev/ttyUSB1 (or COM1) and runs per
+an `iotlab-m3` node that is connected to /dev/ttyUSB1 (or COM1) and runs per
 default with a baudrate of 500000.
 
 #### Linux

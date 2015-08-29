@@ -20,7 +20,7 @@
 
 #include "msg.h"
 #include "netapi.h"
-#include "net/ng_netif.h"
+#include "net/gnrc/netif.h"
 #include "thread.h"
 #include "utlist.h"
 #include "mutex.h"
@@ -42,7 +42,7 @@ char nhdp_rcv_stack[NHDP_STACK_SIZE];
 static kernel_pid_t nhdp_pid = KERNEL_PID_UNDEF;
 static kernel_pid_t nhdp_rcv_pid = KERNEL_PID_UNDEF;
 static kernel_pid_t helper_pid = KERNEL_PID_UNDEF;
-static nhdp_if_entry_t nhdp_if_table[NG_NETIF_NUMOF];
+static nhdp_if_entry_t nhdp_if_table[GNRC_NETIF_NUMOF];
 static mutex_t send_rcv_mutex = MUTEX_INIT;
 static sockaddr6_t sa_bcast;
 static int sock_rcv;
@@ -71,7 +71,7 @@ void nhdp_init(void)
     }
 
     /* Prepare interface table */
-    for (int i = 0; i < NG_NETIF_NUMOF; i++) {
+    for (int i = 0; i < GNRC_NETIF_NUMOF; i++) {
         nhdp_if_table[i].if_pid = KERNEL_PID_UNDEF;
         memset(&nhdp_if_table[i].wr_target, 0, sizeof(struct rfc5444_writer_target));
     }
@@ -90,7 +90,7 @@ kernel_pid_t nhdp_start(void)
         ipv6_addr_set_all_nodes_addr(&sa_bcast.sin6_addr);
 
         /* Configure sending/receiving UDP socket */
-        sock_rcv = socket_base_socket(PF_INET6, SOCK_DGRAM, IPPROTO_UDP);
+        sock_rcv = socket_base_socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP);
 
         /* Start the NHDP thread */
         nhdp_pid = thread_create(nhdp_stack, sizeof(nhdp_stack), THREAD_PRIORITY_MAIN - 1,
@@ -126,7 +126,7 @@ int nhdp_register_if(kernel_pid_t if_pid, uint8_t *addr, size_t addr_size, uint8
         return -2;
     }
 
-    for (int i = 0; i < NG_NETIF_NUMOF; i++) {
+    for (int i = 0; i < GNRC_NETIF_NUMOF; i++) {
         if (nhdp_if_table[i].if_pid == KERNEL_PID_UNDEF) {
             if_entry = &nhdp_if_table[i];
             break;

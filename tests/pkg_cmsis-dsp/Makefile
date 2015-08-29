@@ -9,7 +9,7 @@ BOARD_WHITELIST := \
   cc2538dk \
   f4vi1 \
   fox \
-  iot-lab_M3 \
+  iotlab-m3 \
   mbed_lpc1768 \
   msbiot \
   mulle \
@@ -29,6 +29,7 @@ BOARD_WHITELIST := \
   stm32f4discovery \
   udoo \
   yunjia-nrf51822 \
+  nrf6310 \
   #
 
 include $(RIOTBASE)/Makefile.include

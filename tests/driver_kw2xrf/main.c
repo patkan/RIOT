@@ -21,10 +21,14 @@
 
 #include "shell.h"
 #include "shell_commands.h"
-#include "posix_io.h"
-#include "board_uart0.h"
-#include "net/ng_netbase.h"
-#include "net/ng_pktdump.h"
+#ifdef MODULE_NEWLIB
+#   include "uart_stdio.h"
+#else
+#   include "posix_io.h"
+#   include "board_uart0.h"
+#endif
+#include "net/gnrc.h"
+#include "net/gnrc/pktdump.h"
 
 /**
  * @brief   Buffer size used by the shell
@@ -34,21 +38,25 @@
 int main(void)
 {
     shell_t shell;
-    ng_netreg_entry_t dump;
+    gnrc_netreg_entry_t dump;
 
     puts("KW2XRF device driver test");
 
     /* register the pktdump thread */
-    puts("Register the packet dump thread for NG_NETTYPE_UNDEF packets");
-    dump.pid = ng_pktdump_getpid();
-    dump.demux_ctx = NG_NETREG_DEMUX_CTX_ALL;
-    ng_netreg_register(NG_NETTYPE_UNDEF, &dump);
+    puts("Register the packet dump thread for GNRC_NETTYPE_UNDEF packets");
+    dump.pid = gnrc_pktdump_getpid();
+    dump.demux_ctx = GNRC_NETREG_DEMUX_CTX_ALL;
+    gnrc_netreg_register(GNRC_NETTYPE_UNDEF, &dump);
 
     /* start the shell */
     puts("Initialization successful - starting the shell now");
+#ifndef MODULE_NEWLIB
     (void) posix_open(uart0_handler_pid, 0);
     shell_init(&shell, NULL, SHELL_BUFSIZE, uart0_readc, uart0_putc);
-    shell_run(&shell);
+#else
+    shell_init(&shell, NULL, SHELL_BUFSIZE, getchar, putchar);
+#endif
+        shell_run(&shell);
 
     return 0;
 }

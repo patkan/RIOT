@@ -25,10 +25,21 @@
 #define IPV6_H_
 
 #include "ipv6/addr.h"
+#include "ipv6/ext.h"
+#include "ipv6/hdr.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @brief   minimum **M**aximum **T**ransition **U**nit
+ *
+ * @see <a href="https://tools.ietf.org/html/rfc4944#section-5.3">
+ *          RFC 2460, section 5.3
+ *      </a>
+ */
+#define IPV6_MIN_MTU    (1280)
 
 #ifdef __cplusplus
 }
