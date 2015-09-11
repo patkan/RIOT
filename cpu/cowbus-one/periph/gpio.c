@@ -24,186 +24,59 @@
 #include "periph/gpio.h"
 #include "periph_conf.h"
 
+//#define GPIO_NUMOF 32;
+
 typedef struct {
     gpio_cb_t cb;
     void *arg;
 } gpio_state_t;
 
-static gpio_state_t gpio_config[GPIO_NUMOF];
 
-/* static port mappings */
-static GPIO_TypeDef *const gpio_port_map[GPIO_NUMOF] = {
-#if GPIO_0_EN
-    [GPIO_0] = GPIO_0_PORT,
-#endif
-#if GPIO_1_EN
-    [GPIO_1] = GPIO_1_PORT,
-#endif
-#if GPIO_2_EN
-    [GPIO_2] = GPIO_2_PORT,
-#endif
-#if GPIO_3_EN
-    [GPIO_3] = GPIO_3_PORT,
-#endif
-#if GPIO_4_EN
-    [GPIO_4] = GPIO_4_PORT,
-#endif
-#if GPIO_5_EN
-    [GPIO_5] = GPIO_5_PORT,
-#endif
-#if GPIO_6_EN
-    [GPIO_6] = GPIO_6_PORT,
-#endif
-#if GPIO_7_EN
-    [GPIO_7] = GPIO_7_PORT,
-#endif
-#if GPIO_8_EN
-    [GPIO_8] = GPIO_8_PORT,
-#endif
-#if GPIO_9_EN
-    [GPIO_9] = GPIO_9_PORT,
-#endif
-#if GPIO_10_EN
-    [GPIO_10] = GPIO_10_PORT,
-#endif
-#if GPIO_11_EN
-    [GPIO_11] = GPIO_11_PORT,
-#endif
-};
+/**
+ * @brief   The STM32F0 has 16 EXTI channels
+ */
+#define EXTI_NUMOF      (16U)
 
-/* static pin mappings */
-static const uint8_t gpio_pin_map[GPIO_NUMOF] = {
-#if GPIO_0_EN
-    [GPIO_0] = GPIO_0_PIN,
-#endif
-#if GPIO_1_EN
-    [GPIO_1] = GPIO_1_PIN,
-#endif
-#if GPIO_2_EN
-    [GPIO_2] = GPIO_2_PIN,
-#endif
-#if GPIO_3_EN
-    [GPIO_3] = GPIO_3_PIN,
-#endif
-#if GPIO_4_EN
-    [GPIO_4] = GPIO_4_PIN,
-#endif
-#if GPIO_5_EN
-    [GPIO_5] = GPIO_5_PIN,
-#endif
-#if GPIO_6_EN
-    [GPIO_6] = GPIO_6_PIN,
-#endif
-#if GPIO_7_EN
-    [GPIO_7] = GPIO_7_PIN,
-#endif
-#if GPIO_8_EN
-    [GPIO_8] = GPIO_8_PIN,
-#endif
-#if GPIO_9_EN
-    [GPIO_9] = GPIO_9_PIN,
-#endif
-#if GPIO_10_EN
-    [GPIO_10] = GPIO_10_PIN,
-#endif
-#if GPIO_11_EN
-    [GPIO_11] = GPIO_11_PIN,
-#endif
-};
+static gpio_state_t gpio_config[EXTI_NUMOF];
 
-/* static irq mappings */
-static const IRQn_Type gpio_irq_map[GPIO_NUMOF] = {
-#if GPIO_0_EN
-    [GPIO_0] = GPIO_0_IRQ,
-#endif
-#if GPIO_1_EN
-    [GPIO_1] = GPIO_1_IRQ,
-#endif
-#if GPIO_2_EN
-    [GPIO_2] = GPIO_2_IRQ,
-#endif
-#if GPIO_3_EN
-    [GPIO_3] = GPIO_3_IRQ,
-#endif
-#if GPIO_4_EN
-    [GPIO_4] = GPIO_4_IRQ,
-#endif
-#if GPIO_5_EN
-    [GPIO_5] = GPIO_5_IRQ,
-#endif
-#if GPIO_6_EN
-    [GPIO_6] = GPIO_6_IRQ,
-#endif
-#if GPIO_7_EN
-    [GPIO_7] = GPIO_7_IRQ,
-#endif
-#if GPIO_8_EN
-    [GPIO_8] = GPIO_8_IRQ,
-#endif
-#if GPIO_9_EN
-    [GPIO_9] = GPIO_9_IRQ,
-#endif
-#if GPIO_10_EN
-    [GPIO_10] = GPIO_10_IRQ,
-#endif
-#if GPIO_11_EN
-    [GPIO_11] = GPIO_11_IRQ,
-#endif
-};
+/**
+ * @brief   Extract the port base address from the given pin identifier
+ */
+static inline GPIO_TypeDef *_port(gpio_t pin)
+{
+    return (GPIO_TypeDef *)(pin & ~(0x0f));
+}
 
-/* static clock mapping */
-static const uint8_t gpio_clock_map[GPIO_NUMOF] = {
-#if GPIO_0_EN
-    [GPIO_0] = GPIO_0_CLK,
-#endif
-#if GPIO_1_EN
-    [GPIO_1] = GPIO_1_CLK,
-#endif
-#if GPIO_2_EN
-    [GPIO_2] = GPIO_2_CLK,
-#endif
-#if GPIO_3_EN
-    [GPIO_3] = GPIO_3_CLK,
-#endif
-#if GPIO_4_EN
-    [GPIO_4] = GPIO_4_CLK,
-#endif
-#if GPIO_5_EN
-    [GPIO_5] = GPIO_5_CLK,
-#endif
-#if GPIO_6_EN
-    [GPIO_6] = GPIO_6_CLK,
-#endif
-#if GPIO_7_EN
-    [GPIO_7] = GPIO_7_CLK,
-#endif
-#if GPIO_8_EN
-    [GPIO_8] = GPIO_8_CLK,
-#endif
-#if GPIO_9_EN
-    [GPIO_9] = GPIO_9_CLK,
-#endif
-#if GPIO_10_EN
-    [GPIO_10] = GPIO_10_CLK,
-#endif
-#if GPIO_11_EN
-    [GPIO_11] = GPIO_11_CLK,
-#endif
-};
+/**
+ * @brief   Extract the port number form the given identifier
+ *
+ * The port number is extracted by looking at bits 10, 11, 12, 13 of the base
+ * register addresses.
+ */
+static inline int _port_num(gpio_t pin)
+{
+    return ((pin >> 10) & 0x0f);
+}
+
+/**
+ * @brief   Extract the pin number from the last 4 bit of the pin identifier
+ */
+static inline int _pin_num(gpio_t pin)
+{
+    return (pin & 0x0f);
+}
+
 
 int gpio_init(gpio_t dev, gpio_dir_t dir, gpio_pp_t pullup)
 {
     GPIO_TypeDef *port;
     uint8_t pin;
 
-    if (dev >= GPIO_NUMOF) {
-        return -1;
-    }
+    port = _port(dev);
+    pin = _pin_num(dev);
 
-    port = gpio_port_map[dev];
-    pin = gpio_pin_map[dev];
-
-    RCC->AHBENR |= (1 << gpio_clock_map[dev]);
+    //RCC->AHBENR |= (1 << gpio_clock_map[dev]);
+    RCC->AHBENR |= (RCC_AHBENR_GPIOAEN << _port_num(pin));
 
     port->PUPDR &= ~(3 << (2 * pin));           /* configure push-pull resistors */
     port->PUPDR |= (pullup << (2 * pin));
@@ -228,11 +101,7 @@ int gpio_init_int(gpio_t dev, gpio_pp_t pullup, gpio_flank_t flank, gpio_cb_t cb
     int res;
     uint8_t pin;
 
-    if (dev >= GPIO_NUMOF) {
-        return -1;
-    }
-
-    pin = gpio_pin_map[dev];
+    pin = _pin_num(dev);
 
     /* configure pin as input */
     res = gpio_init(dev, GPIO_DIR_IN, pullup);
@@ -311,7 +180,17 @@ int gpio_init_int(gpio_t dev, gpio_pp_t pullup, gpio_flank_t flank, gpio_cb_t cb
             break;
 #endif
     }
-    NVIC_EnableIRQ(gpio_irq_map[dev]);
+    // TODO
+    /* enable global pin interrupt */
+    if (pin < 2) {
+        NVIC_EnableIRQ(EXTI0_1_IRQn);
+    }
+    else if (pin < 4) {
+        NVIC_EnableIRQ(EXTI2_3_IRQn);
+    }
+    else {
+        NVIC_EnableIRQ(EXTI4_15_IRQn);
+    }
 
     /* set callback */
     gpio_config[dev].cb = cb;
@@ -345,11 +224,7 @@ void gpio_irq_enable(gpio_t dev)
 {
     uint8_t pin;
 
-    if (dev >= GPIO_NUMOF) {
-        return;
-    }
-
-    pin = gpio_pin_map[dev];
+    pin = _pin_num(dev);
     EXTI->IMR |= (1 << pin);
 }
 
@@ -357,11 +232,7 @@ void gpio_irq_disable(gpio_t dev)
 {
     uint8_t pin;
 
-    if (dev >= GPIO_NUMOF) {
-        return;
-    }
-
-    pin = gpio_pin_map[dev];
+    pin = _pin_num(dev);
     EXTI->IMR &= ~(1 << pin);
 }
 
@@ -370,12 +241,8 @@ int gpio_read(gpio_t dev)
     GPIO_TypeDef *port;
     uint8_t pin;
 
-    if (dev >= GPIO_NUMOF) {
-        return -1;
-    }
-
-    port = gpio_port_map[dev];
-    pin = gpio_pin_map[dev];
+    port = _port(dev);
+    pin = _pin_num(dev);
 
     if (port->MODER & (1 << (pin * 2))) {       /* if configured as output */
         return port->ODR & (1 << pin);          /* read output data register */
@@ -389,12 +256,8 @@ void gpio_set(gpio_t dev)
     GPIO_TypeDef *port;
     uint8_t pin;
 
-    if (dev >= GPIO_NUMOF) {
-        return;
-    }
-
-    port = gpio_port_map[dev];
-    pin = gpio_pin_map[dev];
+    port = _port(dev);
+    pin = _pin_num(dev);
 
     port->ODR |= (1 << pin);
 }
@@ -404,12 +267,8 @@ void gpio_clear(gpio_t dev)
     GPIO_TypeDef *port;
     uint8_t pin;
 
-    if (dev >= GPIO_NUMOF) {
-        return;
-    }
-
-    port = gpio_port_map[dev];
-    pin = gpio_pin_map[dev];
+    port = _port(dev);
+    pin = _pin_num(dev);
 
     port->ODR &= ~(1 << pin);
 }

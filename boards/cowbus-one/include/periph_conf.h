@@ -7,13 +7,14 @@
  */
 
 /**
- * @ingroup     boards_stm32f0discovery
+ * @ingroup     boards_cowbus-one
  * @{
  *
  * @file
  * @brief       Peripheral MCU configuration for the STM32F0discovery board
  *
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
+ * @author      Michael Zapf <michael.zapf@fau.de>
  */
 
 #ifndef PERIPH_CONF_H_
@@ -28,11 +29,12 @@ extern "C" {
  * @{
  */
 #define CLOCK_HSE           (8000000U)          /* external oscillator */
-#define CLOCK_CORECLOCK     (48000000U)         /* desired core clock frequency */
+#define CLOCK_CORECLOCK     (16000000U)         /* desired core clock frequency */
 
 /* the actual PLL values are automatically generated */
 #define CLOCK_PLL_MUL       (CLOCK_CORECLOCK / CLOCK_HSE)
 /** @} */
+
 
 /**
  * @name Timer configuration
@@ -43,13 +45,13 @@ extern "C" {
 #define TIMER_IRQ_PRIO      1
 
 /* Timer 0 configuration */
-#define TIMER_0_DEV         TIM2
+#define TIMER_0_DEV         TIM3
 #define TIMER_0_CHANNELS    4
 #define TIMER_0_PRESCALER   (47U)
 #define TIMER_0_MAX_VALUE   (0xffffffff)
-#define TIMER_0_CLKEN()     (RCC->APB1ENR |= RCC_APB1ENR_TIM2EN)
-#define TIMER_0_ISR         isr_tim2
-#define TIMER_0_IRQ_CHAN    TIM2_IRQn
+#define TIMER_0_CLKEN()     (RCC->APB1ENR |= RCC_APB1ENR_TIM3EN)
+#define TIMER_0_ISR         isr_tim3
+#define TIMER_0_IRQ_CHAN    TIM3_IRQn
 /** @} */
 
 /**
@@ -68,11 +70,11 @@ extern "C" {
 #define UART_0_IRQ          USART1_IRQn
 #define UART_0_ISR          isr_usart1
 /* UART 0 pin configuration */
-#define UART_0_PORT         GPIOB
-#define UART_0_PORT_CLKEN() (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
-#define UART_0_RX_PIN       7
-#define UART_0_TX_PIN       6
-#define UART_0_AF           0
+#define UART_0_PORT         GPIOA
+#define UART_0_PORT_CLKEN() (RCC->AHBENR |= RCC_AHBENR_GPIOAEN)
+#define UART_0_RX_PIN       10
+#define UART_0_TX_PIN       9
+#define UART_0_AF           1
 
 /* UART 1 device configuration */
 #define UART_1_DEV          USART2
@@ -270,6 +272,43 @@ extern "C" {
 #define GPIO_11_EXTI_CFG()  (SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI15_PC)
 #define GPIO_11_IRQ         EXTI4_15_IRQn
 /** @} */
+
+/**
+ * @name I2C configuration
+ * @{
+ */
+#define I2C_NUMOF           (1U)
+#define I2C_IRQ_PRIO        1
+#define I2C_APBCLK          (36000000U)
+
+#define I2C_0_EN            1
+#define I2C_0_DEV           I2C1
+#define I2C_0_CLKEN()       (RCC->APB1ENR |= RCC_APB1ENR_I2C1EN)
+#define I2C_0_CLKDIS()      (RCC->APB1ENR &= ~(RCC_APB1ENR_I2C1EN))
+#define I2C_0_IRQ           I2C1_IRQn
+#define I2C_0_ISR           isr_i2c1
+#define I2C_0_PORT          PORT_B
+#define I2C_0_PORT_CLKEN()  (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
+#define I2C_0_PIN_SCL       6
+#define I2C_0_PIN_SDA       7
+#define I2C_0_PIN_AF        1
+
+#define I2C_1_EN            0
+#define I2C_1_DEV           I2C2
+#define I2C_1_CLKEN()       (RCC->APB1ENR |= RCC_APB1ENR_I2C2EN)
+#define I2C_1_CLKDIS()      (RCC->APB1ENR &= ~(RCC_APB1ENR_I2C2EN))
+#define I2C_1_IRQ           I2C2_IRQn
+#define I2C_1_ISR           isr_i2c2
+#define I2C_1_PORT          PORT_B
+#define I2C_1_PORT_CLKEN()  (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
+#define I2C_1_PIN_SCL       10
+#define I2C_1_PIN_SDA       11
+#define I2C_1_PIN_AF        0
+
+/** @} */
+
+
+
 
 #ifdef __cplusplus
 }

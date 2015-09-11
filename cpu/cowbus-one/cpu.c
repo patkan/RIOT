@@ -69,10 +69,12 @@ static void clock_init(void)
     RCC->CIR = 0;
 
     /* enable the HSE clock */
-    RCC->CR |= RCC_CR_HSEON;
+    //RCC->CR |= RCC_CR_HSEON;
+    RCC->CR |= RCC_CR_HSION;     // TODO: use HSE
 
     /* wait for HSE to be ready */
-    while (!(RCC->CR & RCC_CR_HSERDY));
+    //while (!(RCC->CR & RCC_CR_HSERDY));
+    while (!(RCC->CR & RCC_CR_HSIRDY));     // TODO: use HSE
 
     /* setup the peripheral bus prescalers */
 
@@ -84,9 +86,11 @@ static void clock_init(void)
     /* configure the PLL */
 
     /* reset PLL configuration bits */
-    RCC->CFGR &= ~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMUL);
+    //RCC->CFGR &= ~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMUL);
     /* set PLL configuration */
-    RCC->CFGR |= RCC_CFGR_PLLSRC_HSE_PREDIV | RCC_CFGR_PLLXTPRE_HSE_PREDIV_DIV1 |
+    //RCC->CFGR |= RCC_CFGR_PLLSRC_HSE_PREDIV | RCC_CFGR_PLLXTPRE_HSE_PREDIV_DIV1 |
+    //             (((CLOCK_PLL_MUL - 2) & 0xf) << 18);
+    RCC->CFGR |= RCC_CFGR_PLLSRC_HSI_DIV2 |
                  (((CLOCK_PLL_MUL - 2) & 0xf) << 18);
 
     /* enable PLL again */
