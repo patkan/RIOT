@@ -28,8 +28,8 @@ extern "C" {
  * @{
  */
 #define HWTIMER_MAXTIMERS       (4U)            /**< the CPU implementation supports 4 HW timers */
-#define HWTIMER_SPEED           (1000000U)      /**< the HW timer runs with 1MHz */
-#define HWTIMER_MAXTICKS        (0xFFFFFFFF)    /**< 32-bit timer */
+#define HWTIMER_SPEED           (31250U)      /**< the HW timer runs with 1MHz */
+#define HWTIMER_MAXTICKS        (0xFFFF)        /**< 16-bit timer */
 #define HWTIMER_SPIN_BARRIER    (18U)           /**< set spin barrier to at least 18 ticks */
 /** @} */
 

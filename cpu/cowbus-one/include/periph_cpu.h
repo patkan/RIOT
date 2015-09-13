@@ -14,6 +14,7 @@
  * @brief           CPU specific definitions for internal peripheral handling
  *
  * @author          Hauke Petersen <hauke.peterse@fu-berlin.de>
+ * @author          Michael Zapf <michael.zapf@fau.de>
  */
 
 #ifndef PERIPH_CPU_H_
@@ -44,7 +45,7 @@ typedef uint32_t gpio_t;
 #define GPIO(x, y)          ((GPIOA_BASE + (x << 10)) | y)
 
 /**
- * @brief   Available ports on the STM32F3 family
+ * @brief   Available ports on the STM32F0 family
  */
 enum {
     PORT_A = 0,             /**< port A */
@@ -57,8 +58,6 @@ enum {
 
 /**
  * @brief   Available MUX values for configuring a pin's alternate function
- *
- * For some reason AF13 is not used on this CPU.
  */
 typedef enum {
     GPIO_AF0 = 0,           /**< use alternate function 0 */
@@ -67,15 +66,8 @@ typedef enum {
     GPIO_AF3,               /**< use alternate function 3 */
     GPIO_AF4,               /**< use alternate function 4 */
     GPIO_AF5,               /**< use alternate function 5 */
-    GPIO_AF6,               /**< use alternate function 6 */
-    GPIO_AF7,               /**< use alternate function 7 */
-    GPIO_AF8,               /**< use alternate function 8 */
-    GPIO_AF9,               /**< use alternate function 9 */
-    GPIO_AF10,              /**< use alternate function 10 */
-    GPIO_AF11,              /**< use alternate function 11 */
-    GPIO_AF12,              /**< use alternate function 12 */
-    GPIO_AF14,              /**< use alternate function 14 */
-    GPIO_AF15               /**< use alternate function 14 */
+    GPIO_AF6               /**< use alternate function 6 */
+
 } gpio_af_t;
 
 

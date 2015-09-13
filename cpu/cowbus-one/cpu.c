@@ -68,13 +68,19 @@ static void clock_init(void)
     /* disable all clock interrupts */
     RCC->CIR = 0;
 
+#ifdef USE_HSE
     /* enable the HSE clock */
-    //RCC->CR |= RCC_CR_HSEON;
-    RCC->CR |= RCC_CR_HSION;     // TODO: use HSE
-
+    RCC->CR |= RCC_CR_HSEON;
+    
     /* wait for HSE to be ready */
-    //while (!(RCC->CR & RCC_CR_HSERDY));
-    while (!(RCC->CR & RCC_CR_HSIRDY));     // TODO: use HSE
+    while (!(RCC->CR & RCC_CR_HSERDY));
+#else
+    /* enable the HSI clock */
+    RCC->CR |= RCC_CR_HSION;
+    
+    /* wait for HSI to be ready */
+    while (!(RCC->CR & RCC_CR_HSIRDY));
+#endif
 
     /* setup the peripheral bus prescalers */
 
@@ -86,16 +92,24 @@ static void clock_init(void)
     /* configure the PLL */
 
     /* reset PLL configuration bits */
-    //RCC->CFGR &= ~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMUL);
+    RCC->CFGR &= ~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMUL);
+    
     /* set PLL configuration */
-    //RCC->CFGR |= RCC_CFGR_PLLSRC_HSE_PREDIV | RCC_CFGR_PLLXTPRE_HSE_PREDIV_DIV1 |
-    //             (((CLOCK_PLL_MUL - 2) & 0xf) << 18);
+#ifdef USE_HSE
+    RCC->CFGR |= RCC_CFGR_PLLSRC_HSE_PREDIV | RCC_CFGR_PLLXTPRE_HSE_PREDIV_DIV1 |
+                 (((CLOCK_PLL_MUL - 2) & 0xf) << 18);
+#else
     RCC->CFGR |= RCC_CFGR_PLLSRC_HSI_DIV2 |
                  (((CLOCK_PLL_MUL - 2) & 0xf) << 18);
+#endif
 
-    /* enable PLL again */
+    //RCC->CFGR &= ~(0xF << 18);             // set PLLMUL to 0 (factor 2)
+    //RCC->CFGR |= 0x2 << 18;                // set PLLMUL to 2 (factor 4)
+    //RCC->CFGR |= 0x3 << 18;              // set PLLMUL to 3 (factor 8)
+
+    ///* enable PLL again */
     RCC->CR |= RCC_CR_PLLON;
-    /* wait until PLL is stable */
+    ///* wait until PLL is stable */
     while(!(RCC->CR & RCC_CR_PLLRDY));
 
     /* configure flash latency */
@@ -105,7 +119,7 @@ static void clock_init(void)
 
     /* configure the sysclock and the peripheral clocks */
 
-    /* set sysclock to be driven by the PLL clock */
+    ///* set sysclock to be driven by the PLL clock */
     RCC->CFGR &= ~RCC_CFGR_SW;
     RCC->CFGR |= RCC_CFGR_SW_PLL;
 

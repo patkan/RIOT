@@ -1,7 +1,6 @@
 export CPU_ARCH = cortex-m0
 
-# use hwtimer compatibility module
-USEMODULE += hwtimer_compat
+USEMODULE += xtimer
 
 # use common periph functions
 USEMODULE += periph_common
