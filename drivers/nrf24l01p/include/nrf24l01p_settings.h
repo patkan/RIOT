@@ -31,18 +31,23 @@ extern "C" {
 #define INITIAL_RF_CHANNEL          5
 #define INITIAL_RX_POWER_0dB        0
 
-#define DELAY_CS_TOGGLE_TICKS       2
-#define DELAY_AFTER_FUNC_TICKS      2
+//#define DELAY_CS_TOGGLE_TICKS       2
+#define DELAY_CS_TOGGLE_TICKS       3
+//#define DELAY_AFTER_FUNC_TICKS      2
+#define DELAY_AFTER_FUNC_TICKS      3
 #define DELAY_CE_HIGH_US            (20)
 #define DELAY_CHANGE_PWR_MODE_US    (1500)
-#define DELAY_CHANGE_TXRX_US        (130)
-#define DELAY_CE_START_US           (5)
+//#define DELAY_CHANGE_TXRX_US        (130)
+#define DELAY_CHANGE_TXRX_US        (250)
+//#define DELAY_CE_START_US           (5)
+#define DELAY_CE_START_US           (55)
 /*
  * This is the time which is needed to physically transmit the data.
  * Compare nrf24l01+ pruduct specification p.42. It is computed just
  * for this setup
  */
-#define DELAY_DATA_ON_AIR                   (1300)
+//#define DELAY_DATA_ON_AIR                   (1300)
+#define DELAY_DATA_ON_AIR                   (1500)
 
 
 #define CMD_R_REGISTER          0x00

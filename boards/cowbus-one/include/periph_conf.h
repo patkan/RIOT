@@ -56,7 +56,7 @@ extern "C" {
 #define TIMER_0_CHANNELS    4
 //#define TIMER_0_PRESCALER   (511U)
 #define TIMER_0_PRESCALER   (15U)
-#define TIMER_0_MAX_VALUE   (0xffff)
+#define TIMER_0_MAX_VALUE   (0xFFFF)
 #define TIMER_0_CLKEN()     (RCC->APB1ENR |= RCC_APB1ENR_TIM3EN)
 #define TIMER_0_ISR         isr_tim3
 #define TIMER_0_IRQ_CHAN    TIM3_IRQn
@@ -189,6 +189,13 @@ extern "C" {
 #define GPIO_SWITCH_3   GPIO(PORT_B,  9)
 #define GPIO_SWITCH_4   GPIO(PORT_B, 14)
 
+#define GPIO_NRF_SCK    GPIO(PORT_A, 5)
+#define GPIO_NRF_MISO   GPIO(PORT_A, 6)
+#define GPIO_NRF_MOSI   GPIO(PORT_A, 7)
+#define GPIO_NRF_IRQ    GPIO(PORT_B, 0)
+#define GPIO_NRF_CSN    GPIO(PORT_B, 1)
+#define GPIO_NRF_CE     GPIO(PORT_B, 2)
+
 
 
 /** @} */
@@ -224,7 +231,7 @@ extern "C" {
 #define I2C_1_PORT_CLKEN()  (RCC->AHBENR |= RCC_AHBENR_GPIOBEN)
 #define I2C_1_PIN_SCL       10
 #define I2C_1_PIN_SDA       11
-#define I2C_1_PIN_AF        0
+#define I2C_1_PIN_AF        1
 
 /** @} */
 

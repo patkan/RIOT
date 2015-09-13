@@ -51,8 +51,11 @@ extern "C" {
  * @name xtimer tuning values
  * @{
  */
+#define XTIMER_BACKOFF      25
+#define XTIMER_USLEEP_UNTIL_OVERHEAD 20
 #define XTIMER_OVERHEAD     5
-#define XTIMER_SHOOT_EARLY  2
+//#define XTIMER_MASK         0xFFFF0000
+//#define XTIMER_SHOOT_EARLY  2
 /** @} */
 
 /**
