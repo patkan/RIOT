@@ -60,7 +60,11 @@ static void clock_init(void)
 
     /* enable the HSI clock */
     RCC->CR |= RCC_CR_HSION;
-   
+
+    ///* disable the HSI clock */
+    //RCC->CR &= (~RCC_CR_HSION);
+    //while ((RCC->CR & RCC_CR_HSIRDY));
+
     /* test external low speed crystal */
     //RCC->BDCR |= RCC_BDCR_LSEON;
     //RCC->BDCR &= ~(RCC_BDCR_LSEBYP);
@@ -76,18 +80,21 @@ static void clock_init(void)
     /* disable all clock interrupts */
     RCC->CIR = 0;
 
+    /* disable clock output */
+    //RCC->CFGR &= ~(RCC_CFGR_MCO);
+
 #ifdef USE_HSE
     /* enable the HSE clock */
     RCC->CR |= RCC_CR_HSEON;
 
     //for (volatile unsigned int i = 0; i < 10000; ++i) { asm volatile ("nop"); }
-    
+
     /* wait for HSE to be ready */
     while (!(RCC->CR & RCC_CR_HSERDY));
 #else
     /* enable the HSI clock */
     RCC->CR |= RCC_CR_HSION;
-    
+
     /* wait for HSI to be ready */
     while (!(RCC->CR & RCC_CR_HSIRDY));
 #endif
@@ -103,7 +110,7 @@ static void clock_init(void)
 
     /* reset PLL configuration bits */
     RCC->CFGR &= ~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMUL);
-    
+
     /* set PLL configuration */
 #ifdef USE_HSE
     RCC->CFGR |= RCC_CFGR_PLLSRC_HSE_PREDIV | RCC_CFGR_PLLXTPRE_HSE_PREDIV_DIV1 |
