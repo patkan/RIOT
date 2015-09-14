@@ -174,6 +174,19 @@ int gpio_init_int(gpio_t dev, gpio_pp_t pullup, gpio_flank_t flank, gpio_cb_t cb
     return 0;
 }
 
+void gpio_init_af(gpio_t pin, gpio_af_t af)
+{
+    GPIO_TypeDef *port = _port(pin);
+    uint32_t pin_num = _pin_num(pin);
+
+    /* set pin to AF mode */
+    port->MODER &= ~(3 << (2 * pin_num));
+    port->MODER |= (2 << (2 * pin_num));
+    /* set selected function */
+    port->AFR[(pin_num > 7) ? 1 : 0] &= ~(0xf << ((pin_num & 0x07) * 4));
+    port->AFR[(pin_num > 7) ? 1 : 0] |= (af << ((pin_num & 0x07) * 4));
+}
+
 void gpio_irq_enable(gpio_t dev)
 {
     uint8_t pin;

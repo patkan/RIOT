@@ -53,10 +53,18 @@ void cpu_init(void)
  */
 static void clock_init(void)
 {
+    // enable clock for GPIO_F-block
+	//(RCC->AHBENR |= RCC_AHBENR_GPIOFEN);
+
     /* configure the HSE clock */
 
     /* enable the HSI clock */
     RCC->CR |= RCC_CR_HSION;
+   
+    /* test external low speed crystal */
+    //RCC->BDCR |= RCC_BDCR_LSEON;
+    //RCC->BDCR &= ~(RCC_BDCR_LSEBYP);
+    //while (!(RCC->BDCR & RCC_BDCR_LSERDY));
 
     /* reset clock configuration register */
     RCC->CFGR = 0;
@@ -71,6 +79,8 @@ static void clock_init(void)
 #ifdef USE_HSE
     /* enable the HSE clock */
     RCC->CR |= RCC_CR_HSEON;
+
+    //for (volatile unsigned int i = 0; i < 10000; ++i) { asm volatile ("nop"); }
     
     /* wait for HSE to be ready */
     while (!(RCC->CR & RCC_CR_HSERDY));

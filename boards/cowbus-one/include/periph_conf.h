@@ -221,6 +221,8 @@ extern "C" {
 #define I2C_0_PIN_SDA       7
 #define I2C_0_PIN_AF        1
 
+#define TEMP_I2C_ADDRESS    (0x48)
+
 #define I2C_1_EN            0
 #define I2C_1_DEV           I2C2
 #define I2C_1_CLKEN()       (RCC->APB1ENR |= RCC_APB1ENR_I2C2EN)
