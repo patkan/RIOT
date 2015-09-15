@@ -22,13 +22,38 @@
 #include "board.h"
 #include "periph/uart.h"
 
+#include "xtimer.h"
+
+#include "led.h"
+#include "switch.h"
+#include "eeprom.h"
+#include "temp.h"
+#include "buzzer.h"
+
 
 void board_init(void)
 {
-    /* initialize the boards LEDs */
-    //leds_init();
-
     /* initialize the CPU */
     cpu_init();
+    
+    /* initialize timer */
+    xtimer_init();
+    
+    /* initialize the selected periphery */
+#ifdef PERIPH_EN_BUZZER
+    buzzer_init();
+#endif
+#ifdef PERIPH_EN_EEPROM
+    eeprom_init();
+#endif
+#ifdef PERIPH_EN_TEMP
+    temp_init();
+#endif
+#ifdef PERIPH_EN_LED
+    led_init();
+#endif
+#ifdef PERIPH_EN_SWITCH
+    switch_init();
+#endif
 }
 

@@ -196,6 +196,10 @@ extern "C" {
 #define GPIO_NRF_CSN    GPIO(PORT_B, 1)
 #define GPIO_NRF_CE     GPIO(PORT_B, 2)
 
+#define GPIO_BUZZER_PIN GPIO(PORT_A, 4)
+
+#define GPIO_BUZZER_ON()    gpio_clear(GPIO_BUZZER_PIN)
+#define GPIO_BUZZER_OFF()   gpio_set(GPIO_BUZZER_PIN)
 
 
 /** @} */

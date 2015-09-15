@@ -37,7 +37,7 @@ void led_set_color(led_color color);
  * @param   col         Color to be set
  * @param   ms_on       Time in ms the LED should be on each time
  * @param   ms_off      Time in ms the LED should be off each time
- * @param   ms_times    How often the LED should be switched on
+ * @param   times       How often the LED should be switched on
  */
 void led_blink(led_color color, uint16_t ms_on, uint16_t ms_off, uint8_t times);
 
@@ -45,7 +45,7 @@ void led_blink(led_color color, uint16_t ms_on, uint16_t ms_off, uint8_t times);
  * @brief   Switches the RGB LED on and off the given number of times.
  * @param   col         Color to be set
  * @param   ms_on       Time in ms the LED should be on each time
- * @param   ms_times    How often the LED should be switched on
+ * @param   times       How often the LED should be switched on
  */
 void led_blink_s(led_color color, uint16_t ms_on, uint8_t times);
 

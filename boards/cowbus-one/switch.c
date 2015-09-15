@@ -4,6 +4,8 @@
  * @date    2015-09-13
  */
 
+#ifdef PERIPH_EN_SWITCH
+
 #include "board.h"
 #include "cpu.h"
 #include "periph/gpio.h"
@@ -84,3 +86,4 @@ void switch4_set_isr(void (*cb)(void)) {
 }
 
 
+#endif // PERIPH_EN_SWITCH

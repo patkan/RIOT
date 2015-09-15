@@ -4,6 +4,9 @@
  * @file
  */
 
+
+#ifdef PERIPH_EN_LED
+
 #include "board.h"
 #include "cpu.h"
 #include "periph/gpio.h"
@@ -87,3 +90,4 @@ inline void led_blink_s(led_color color, uint16_t ms_on, uint8_t times) {
 }
 
 
+#endif // PERIPH_EN_LED
