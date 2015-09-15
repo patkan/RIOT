@@ -11,25 +11,29 @@
 #define BUZZER_H
 
 
+typedef enum buzzer_note_t {
+    note_c2 = 0,
+    note_d2 = 1,
+    note_e2 = 2,
+    note_f2 = 3,
+    note_g2 = 4,
+    note_a2 = 5,
+    note_b2 = 6,
+    note_c3 = 7
+} buzzer_note_t;
+
 /**
  * @brief   Initializes the Buzzer
  */
 void buzzer_init(void);
 
 /**
- * @brief   Switches the buzzer on for a given time then given number of times.
- * @param   ms          The time the buzzer is on (same as time for off).
+ * @brief   Plays a specific note with the buzzerme then given number of times.
+ * @param   note        The note the buzzer shall play.
+ * @param   ms          The time the buzzer plays the note in milliseconds.
  * @param   times
  */
-void buzzer(uint16_t ms, uint8_t times);
-
-/**
- * @brief   Switches the buzzer on and off the given number of times.
- * @param   ms_on       Time in ms the buzzer should beep
- * @param   ms_off      Time in ms the buzzer should be off between beeps
- * @param   times       How often the buzzer should beep
- */
-void buzzer_multiple(uint16_t ms_on, uint16_t ms_off, uint8_t times);
+void buzzer(buzzer_note_t note, uint16_t ms);
 
 
 
