@@ -86,6 +86,7 @@ static void clock_init(void)
 #ifdef USE_HSE
     /* enable the HSE clock */
     RCC->CR |= RCC_CR_HSEON;
+    RCC->BDCR &= ~(RCC_BDCR_LSEBYP);    // disable HSE bypass
 
     //for (volatile unsigned int i = 0; i < 10000; ++i) { asm volatile ("nop"); }
 
