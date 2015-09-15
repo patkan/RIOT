@@ -26,7 +26,8 @@
 
 #include "led.h"
 #include "switch.h"
-#include "eeprom.h"
+//#include "eeprom.h"
+// TODO move generic eeprom functions to board and leave cowconfig stuff in app
 #include "temp.h"
 #include "buzzer.h"
 
@@ -35,17 +36,17 @@ void board_init(void)
 {
     /* initialize the CPU */
     cpu_init();
-    
+
     /* initialize timer */
     xtimer_init();
-    
+
     /* initialize the selected periphery */
 #ifdef PERIPH_EN_BUZZER
     buzzer_init();
 #endif
-#ifdef PERIPH_EN_EEPROM
-    eeprom_init();
-#endif
+//#ifdef PERIPH_EN_EEPROM
+//    eeprom_init();
+//#endif
 #ifdef PERIPH_EN_TEMP
     temp_init();
 #endif
