@@ -66,9 +66,11 @@ static void clock_init(void)
     //while ((RCC->CR & RCC_CR_HSIRDY));
 
     /* test external low speed crystal */
-    //RCC->BDCR |= RCC_BDCR_LSEON;
+    RCC->APB1ENR |= RCC_APB1ENR_PWREN;          //enable clock for power control
+    PWR->CR |= PWR_CR_DBP;                      //disable write protection of RTC register domain
+    RCC->BDCR |= RCC_BDCR_LSEON;                //enable LSE
     //RCC->BDCR &= ~(RCC_BDCR_LSEBYP);
-    //while (!(RCC->BDCR & RCC_BDCR_LSERDY));
+    while (!(RCC->BDCR & RCC_BDCR_LSERDY));     //wait for LSE to become stable
 
     /* reset clock configuration register */
     RCC->CFGR = 0;
